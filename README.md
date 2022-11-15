@@ -1,4 +1,12 @@
-To create the build files
+# Training for embedded systems with Renode
+
+To install the compiler toolchain: 
+```
+sudo bash setup.sh
+```
+
+
+To create the build files:
 
 ```
 mkdir cmake-build-debug
