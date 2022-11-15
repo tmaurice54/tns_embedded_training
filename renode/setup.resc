@@ -1,0 +1,49 @@
+:name: setup for blinky demo
+
+# path to the binary of the demo
+$bin?=@\\wsl$\OSD\home\deg4lr\training\emulation\blinky\cmake-build-debug\nucleo-blinky.out
+
+# The `using` command allows the user to omit a prefix when referring to a peripheral.
+# Here `using sysbus` allows to refer to `uart2` instead of `sysbus.uart2`. 
+using sysbus
+
+# Create a connection for the uart printf
+emulation CreateServerSocketTerminal 3456 "term"
+
+# Create a machine emulating the processor named "blinker" based on the stm32f4 discovery family of boards
+# The @ is a relative path from the Renode source directory and the directory from which renode was started
+mach create "blinker"
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
+
+# fix for the stm32f4's problem with accessing the ACR register
+# https://github.com/renode/renode/issues/300
+sysbus Tag <0x40023C00, 0x40023C07> "FLASH:ACR" 0x5
+sysbus Tag <0x50000010, 0x5000003f> "USB:RESET" 0x80000000
+
+# log access to the gpioPortB as this is where the LED pins are located
+sysbus LogPeripheralAccess gpioPortB
+
+# Connect the uart2 to the socket previously created
+connector Connect usart2 term
+
+#showAnalyzer usart2
+
+####################### DEBUG ##########################
+
+#sysbus LogAllPeripheralsAccess true
+#cpu LogFunctionNames true
+
+########################################################
+
+
+# small script to reset the machine
+macro reset
+"""
+    # load the binary
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset
+
+echo "Script loaded. Now start with with the 'start' command."
+echo ""
