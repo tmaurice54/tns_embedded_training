@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-
+# to avoid vs code error as compiler can't compile a simple program
+# https://stackoverflow.com/a/53635241
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 project(nucleo-blinky)
 
 enable_language(CXX C ASM)
@@ -37,7 +39,7 @@ set(GENERATED_FILES
 
     Core/Src/main.c
     Core/Src/syscalls.c
-    # Core/Src/sysmem.c
+    Core/Src/sysmem.c
     Core/Src/stm32f4xx_hal_msp.c
     Core/Src/stm32f4xx_it.c
     Core/Src/system_stm32f4xx.c
@@ -69,7 +71,6 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -fstack-usage 
     # -MMD 
     # -MP 
-    
     -mfpu=fpv4-sp-d16 
     -mfloat-abi=hard 
     -mthumb
@@ -84,14 +85,9 @@ target_link_options(${EXECUTABLE} PRIVATE
         -specs=nano.specs
         -lc
         -lm
-        # -lrdimon
-        -lnosys
         -Wl,-Map=${PROJECT_NAME}.map,--cref
         -Wl,--gc-sections
         )
-
-# arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"
-
 
 # Print executable size
 add_custom_command(TARGET ${EXECUTABLE}
@@ -103,7 +99,3 @@ add_custom_command(TARGET ${EXECUTABLE}
         POST_BUILD
         COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
         COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
-
-
-
-# cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
