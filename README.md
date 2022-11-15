@@ -1,13 +1,11 @@
 # Training for embedded systems with Renode
-
-To install the compiler toolchain: 
+ 
+## Installing the ARM toolchain
 ```
 sudo bash setup.sh
 ```
 
-
-To create the build files:
-
+## Building the project
 ```
 mkdir cmake-build-debug
 cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
