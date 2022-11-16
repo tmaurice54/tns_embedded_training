@@ -15,8 +15,11 @@ As of the time of writing this tutorial, the current version of renode is Renode
 When launching renode for the first time, you are greeted with two windows: the **prompt** in which you can input commands and the **log window** in which you will see what your program is doing or not doing.
 
 ![Prompt](./ressources/Pasted_image_20221116084219.png)
+
 The prompt
+
 ![Log window](./ressources/Pasted_image_20221116085031.png)
+
 The log window
 
 
