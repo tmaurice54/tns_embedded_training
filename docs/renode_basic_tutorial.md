@@ -14,15 +14,15 @@ As of the time of writing this tutorial, the current version of renode is Renode
 
 When launching renode for the first time, you are greeted with two windows: the **prompt** in which you can input commands and the **log window** in which you will see what your program is doing or not doing.
 
-![Prompt](./ressources/Pasted image 20221116084219.png)
+![Prompt](./ressources/Pasted_image_20221116084219.png)
 The prompt
-![Log window](./ressources/Pasted image 20221116085031.png)
+![Log window](./ressources/Pasted_image_20221116085031.png)
 The log window
 
 
 > **Warning**
 > 
-> Renode does not come with support for keyboards layouts other than QWERTY by default, you can add the layout via the Windows settings. You can also copy / paste commands from the tutorial into the prompt, you have to use `Ctrl + Shift + C` to copy and `Ctrl + Shfit + V` to paste
+> Renode does not come with support for keyboards layouts other than QWERTY by default, you can add the layout via the Windows settings. You can also copy / paste commands from the tutorial into the prompt, you have to use `Ctrl + Shift + C` to copy and `Ctrl + Shift + V` to paste
 
 Renode uses the concept of *machines*, which is the component on which the code is executed. To create a new machine to test some code, type `mach create` in the **prompt**. This will create a machine named ``machine-0``, to specify a name to your machine, simply add the name after  `new` : `mach create stm32`  will create a machine named `stm32`.
 
@@ -51,7 +51,7 @@ To stop the machine, type `pause` or `p`.
 
 If you want to restore renode to its original state without restarting it, type `Clear`.
 
-> **note**
+> **Note**
 > 
 > Renode doesn't allow you to reset the execution of the program with a simple command. To do that you have to pause the machine and reload the ELF binary.
 > This is best done with a macro that will be covered in the next section 
@@ -70,7 +70,7 @@ We can create our first script by putting all the commands from the previous sec
 # Path to the binary of your application CHANGE THE PATH!
 $bin?=@Path/to/the/binary
 
-# Create the machine with the rigth platform
+# Create the machine with the right platform
 mach create "demo"
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
 
@@ -99,9 +99,11 @@ Once the file is saved you can execute it with the `include @Path/to/script.resc
 To make sure that the program is working as intended, we can enable log messages when a peripheral is accessed. In one of the firsts examples of the training, you are tasked with making a LED blink on the board.
 
 From the board's [datasheet](https://www.st.com/resource/en/user_manual/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf), we can see that the LEDs are connected to the pins B0, B7 and B14.
-![Datasheet](ressources/Pasted image 20221116100219.png)
+
+![Datasheet](ressources/Pasted_image_20221116100219.png)
 
 If our program makes the LD1 LED blink every second, we need to spy on the GPIO Port B, this can be done with the following command : `sysbus LogPeripheralAccess gpioPortB`. This will print a log message every time our program accesses the memory region of the GPIO's registers.
-![log window](ressources/Pasted image 20221116100757.png)
+
+![log window](ressources/Pasted_image_20221116100757.png)
 
 Here we can see a read from the GPIO port's ODR (Output Data Register) telling us that PB0 is set, we then see a write to the BSSR (Bit Set/Reset Register) of value `0x10000` which will reset the output of PB0 to 0.
