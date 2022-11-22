@@ -37,7 +37,7 @@ set(GENERATED_FILES
     Core/Inc/stm32f4xx_it.h
 
 
-    Core/Src/main.c
+    Core/Src/main.cpp
     Core/Src/syscalls.c
     Core/Src/sysmem.c
     Core/Src/stm32f4xx_hal_msp.c
@@ -94,8 +94,8 @@ add_custom_command(TARGET ${EXECUTABLE}
         POST_BUILD
         COMMAND arm-none-eabi-size ${EXECUTABLE})
 
-# Create hex file
-add_custom_command(TARGET ${EXECUTABLE}
-        POST_BUILD
-        COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
-        COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
+# Create hex file - Optional
+# add_custom_command(TARGET ${EXECUTABLE}
+#         POST_BUILD
+#         COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
+#         COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
