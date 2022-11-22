@@ -13,7 +13,9 @@ emulation CreateServerSocketTerminal 3456 "term"
 # Create a machine emulating the processor named "blinker" based on the stm32f4 discovery family of boards
 # The @ is a relative path from the Renode source directory and the directory from which renode was started
 mach create "blinker"
-machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
+#machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
+machine LoadPlatformDescription @\\wsl$\OSD\home\deg4lr\training\emulation\blinky\renode\board.repl
+
 
 # fix for the stm32f4's problem with accessing the ACR register
 # https://github.com/renode/renode/issues/300
