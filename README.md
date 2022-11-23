@@ -23,10 +23,17 @@ echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
 
 ## Building the project
 
-**You need to be in either the Baremetal or FreeTROS folder**. It is better to open one of these folder in vs code directly
-
 ``` bash
 mkdir cmake-build-debug && cd cmake-build-debug
 cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
 ninja
+```
+
+### Building a specific target
+
+```bash
+# Baremetal 
+ninja Baremetal
+# FreeRTOS
+ninja FreeRTOS
 ```
