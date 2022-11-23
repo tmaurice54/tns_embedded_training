@@ -90,8 +90,6 @@ int main(void) {
   MX_USB_OTG_FS_PCD_Init();
 
   /* USER CODE BEGIN 2 */
-
-  // printf("Hello from renode!!\n\r");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,6 +97,14 @@ int main(void) {
   while (1) {
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
+
+
+    // If the button is pressed : turn on the LED, else turn it off
+    if (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port,USER_Btn_Pin) == GPIO_PIN_SET) {
+      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
+    } else {
+      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
+    }
 
   }
   /* USER CODE END 3 */
