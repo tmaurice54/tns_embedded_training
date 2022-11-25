@@ -23,9 +23,15 @@ wget -O gcc-arm-none-eabi.tar.xz https://developer.arm.com/-/media/Files/downloa
 
 You can then install it in the folder of your choice and add the binaries to your path
 
-``` bash
+``` bashs
 tar xf ./gcc-arm-none-eabi.tar.xz --strip-components=1 -C <FOLDER_PATH_HERE>
 echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
+```
+
+### Testing the toolchain
+
+```
+arm-none-eabi-gcc --version
 ```
 
 ## Building the project
