@@ -23,7 +23,7 @@ wget -O gcc-arm-none-eabi.tar.xz https://developer.arm.com/-/media/Files/downloa
 
 You can then install it in the folder of your choice and add the binaries to your path
 
-``` bashs
+``` bash
 tar xf ./gcc-arm-none-eabi.tar.xz --strip-components=1 -C <FOLDER_PATH_HERE>
 echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
 ```
@@ -37,9 +37,13 @@ arm-none-eabi-gcc --version
 ## Building the project
 
 Prerequisites: (sudo apt install) 
-- Cmake
+- Cmake   
 - Ninja
 
+>**Note**
+> 
+>If the cmake version is not recent enough follow the instructions from this answer : https://askubuntu.com/a/1157132. to know your distribution : 
+>`lsb_release -a`
 ``` bash
 mkdir cmake-build-debug && cd cmake-build-debug
 cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
