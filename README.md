@@ -32,6 +32,7 @@ echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
 
 ```
 arm-none-eabi-gcc --version
+arm-none-eabi-gdb --version
 ```
 
 ## Building the project
@@ -54,7 +55,7 @@ ninja
 
 ```bash
 # Baremetal 
-ninja Baremetal
+ninja Baremetal/all
 # FreeRTOS
-ninja FreeRTOS
+ninja FreeRTOS/all
 ```
