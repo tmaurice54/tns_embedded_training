@@ -8,6 +8,13 @@ For Windows:  (need admin rights)
 
 Assuming you run a WSL machine
 
+### From the package manager
+
+```
+sudo apt-get install gcc-arm-none-eabi
+```
+
+### From the sources 
 Download the ARM toolchain
 
 ``` bash
@@ -22,6 +29,10 @@ echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
 ```
 
 ## Building the project
+
+Prerequisites: (sudo apt install) 
+- Cmake
+- Ninja
 
 ``` bash
 mkdir cmake-build-debug && cd cmake-build-debug
