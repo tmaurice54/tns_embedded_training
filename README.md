@@ -46,7 +46,7 @@ Prerequisites: (sudo apt install)
 >If the cmake version is not recent enough follow the instructions from this answer : https://askubuntu.com/a/1157132. to know your distribution : 
 >`lsb_release -a`
 ``` bash
-mkdir cmake-build-debug && cd cmake-build-debug
+mkdir build && cd build
 cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
 ninja
 ```
@@ -59,3 +59,14 @@ ninja Baremetal/all
 # FreeRTOS
 ninja FreeRTOS/all
 ```
+
+
+## Testing the sample
+
+If renode is installed on Windows, launch `renode-test` from a powershell or cmd prompt
+
+``` powershell
+renode-test "<Demo folder location>\test\test.robot"
+```
+
+**If you use WSL to compile** : Use "\\\\wsl$\\distro_name\\home\\... as a base for the path to the robot file
