@@ -25,7 +25,7 @@ You can then install it in the folder of your choice and add the binaries to you
 
 ``` bash
 tar xf ./gcc-arm-none-eabi.tar.xz --strip-components=1 -C <FOLDER_PATH_HERE>
-echo "export PATH=$PATH:<FOLDER_PATH_HERE>" >> ~/.bashrc
+echo 'export PATH=$PATH:<FOLDER_PATH_HERE>' >> ~/.bashrc
 ```
 
 ### Testing the toolchain
