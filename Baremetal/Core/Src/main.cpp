@@ -90,6 +90,7 @@ int main(void) {
   MX_USB_OTG_FS_PCD_Init();
 
   /* USER CODE BEGIN 2 */
+  // ButtonWrapper *myUserButton = new ButtonWrapper(USER_Btn_GPIO_Port,USER_Btn_Pin);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -98,14 +99,14 @@ int main(void) {
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
 
-
     // If the button is pressed : turn on the LED, else turn it off
-    if (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port,USER_Btn_Pin) == GPIO_PIN_SET) {
+    /*
+    if (myUserButton->isPressed()) {
       HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
     } else {
       HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
     }
-
+    */
   }
   /* USER CODE END 3 */
 }
@@ -240,7 +241,7 @@ static void MX_GPIO_Init(void) {
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
 
@@ -263,10 +264,19 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+    if ((GPIO_Pin == USER_Btn_Pin) && (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin)==GPIO_PIN_RESET)) {
+      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
+    } else {
+      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
+    }
+}
 /* USER CODE END 4 */
 
 /**
