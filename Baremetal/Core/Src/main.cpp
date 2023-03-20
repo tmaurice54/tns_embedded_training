@@ -271,11 +271,9 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-    if ((GPIO_Pin == USER_Btn_Pin) && (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin)==GPIO_PIN_RESET)) {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
-    } else {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
-    }
+
+  HAL_GPIO_TogglePin(LD1_GPIO_Port,LD1_Pin);
+
 }
 /* USER CODE END 4 */
 

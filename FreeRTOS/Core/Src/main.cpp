@@ -47,8 +47,6 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
-osThreadId_t gpioLed1OnTaskHandle;
-osThreadId_t gpioLed1OffTaskHandle;
 
 
 const osThreadAttr_t defaultTask_attributes = {
@@ -67,19 +65,17 @@ static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_USART2_UART_Init(void);
 void StartDefaultTask(void *argument);
-void GpioLED1Task(void *argument);
-void GpioLED2Task(void *argument);
-void GpioLED3Task(void *argument);
-void GpioLED1OnTask(void *argument);
-void GpioLED1OffTask(void *argument);
-
+void vGpioLED1OnTask(void *argument);
+void vGpioLED1OffTask(void *argument);
+void vGpioLED1Task(void *argument);
+void vGpioLED2Task(void *argument);
 /* USER CODE BEGIN PFP */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-SemaphoreHandle_t xMutex;
+SemaphoreHandle_t xSemBin;
 /* USER CODE END 0 */
 
 /**
@@ -89,7 +85,7 @@ SemaphoreHandle_t xMutex;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  xMutex = xSemaphoreCreateMutex();
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -121,7 +117,8 @@ int main(void)
   osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
+  xSemBin = xSemaphoreCreateBinary();
+  xSemaphoreGive(xSemBin);
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -138,23 +135,19 @@ int main(void)
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  // defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
-  /* USER CODE BEGIN RTOS_THREADS */
-  // gpioLed1TaskHandle = osThreadNew(GpioLED1Task,NULL,&defaultTask_attributes);
-  // gpioLed2TaskHandle = osThreadNew(GpioLED2Task,NULL,&defaultTask_attributes);
-  // gpioLed3TaskHandle = osThreadNew(GpioLED3Task,NULL,&defaultTask_attributes);
-  gpioLed1OnTaskHandle = osThreadNew(GpioLED1OnTask,NULL,&defaultTask_attributes);
-  gpioLed1OffTaskHandle = osThreadNew(GpioLED1OffTask,NULL,&defaultTask_attributes);
-
+  /* USER CODE BEGIN RTOS_THREADS */   
+  xTaskCreate(vGpioLED1OnTask, "LED1 on", 128 * 4, NULL, 1, NULL);
+  xTaskCreate(vGpioLED1OffTask, "LED1 off", 128 * 4, NULL, 1, NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
-  /* add events, ... */
+  vTaskStartScheduler();
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
-  osKernelStart();
+  //osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
@@ -312,7 +305,6 @@ static void MX_USB_OTG_FS_PCD_Init(void)
   /* USER CODE BEGIN USB_OTG_FS_Init 2 */
 
   /* USER CODE END USB_OTG_FS_Init 2 */
-
 }
 
 /**
@@ -398,53 +390,47 @@ void StartDefaultTask(void *argument)
   /* USER CODE END 5 */
 }
 
-void GpioLED1OnTask(void *argument)
+void vGpioLED1OnTask(void *argument)
 {
   for(;;)
   {    
     if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin) == GPIO_PIN_RESET){
-      xSemaphoreTake(xMutex, portMAX_DELAY);
+      xSemaphoreTake(xSemBin, portMAX_DELAY);
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
+      //vTaskDelay( xDelay );
       osDelay(pdMS_TO_TICKS(1000));
-      xSemaphoreGive(xMutex);
+      xSemaphoreGive(xSemBin);
     }    
   }
 }
 
-void GpioLED1OffTask(void *argument)
+void vGpioLED1OffTask(void *argument)
 {
   for(;;)
   {    
     if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin) == GPIO_PIN_SET){
-      xSemaphoreTake(xMutex, portMAX_DELAY);
+      xSemaphoreTake(xSemBin, portMAX_DELAY);
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
+      //vTaskDelay( xDelay );
       osDelay(pdMS_TO_TICKS(1000));
-      xSemaphoreGive(xMutex);   
+      xSemaphoreGive(xSemBin);   
     }    
   }
 }
 
-void GpioLED1Task(void* argument) {
+void vGpioLED1Task(void *argument)
+{
   for(;;){
-    if(HAL_GPIO_ReadPin(USER_Btn_GPIO_Port,USER_Btn_Pin)){
-      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
-    }else{
-      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
-    }
+    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+    osDelay(pdMS_TO_TICKS(1000));
   }
 }
 
-void GpioLED2Task(void* argument) {
+void vGpioLED2Task(void *argument)
+{
   for(;;){
-    osDelay(pdMS_TO_TICKS(333));
-    HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
-  }
-}
-
-void GpioLED3Task(void* argument) {
-  for(;;){
-    osDelay(pdMS_TO_TICKS(500));
-    HAL_GPIO_TogglePin(LD3_GPIO_Port,LD3_Pin);
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    osDelay(pdMS_TO_TICKS(1000));
   }
 }
 
