@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <semphr.h>
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,7 +33,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-/* USER CODE END PD */
+#ifdef __GNUC__
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ *//* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
@@ -47,6 +54,7 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
+TaskHandle_t myIntTaskHandle;
 
 
 const osThreadAttr_t defaultTask_attributes = {
@@ -67,15 +75,14 @@ static void MX_USART2_UART_Init(void);
 void StartDefaultTask(void *argument);
 void vGpioLED1OnTask(void *argument);
 void vGpioLED1OffTask(void *argument);
-void vGpioLED1Task(void *argument);
-void vGpioLED2Task(void *argument);
+void vGpioLED2IntTask(void *argument);
 /* USER CODE BEGIN PFP */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-SemaphoreHandle_t xSemBin;
+SemaphoreHandle_t xSemBin, xSemInt;
 /* USER CODE END 0 */
 
 /**
@@ -119,6 +126,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_MUTEX */
   xSemBin = xSemaphoreCreateBinary();
   xSemaphoreGive(xSemBin);
+  xSemInt = xSemaphoreCreateBinary();
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -140,6 +148,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_THREADS */   
   xTaskCreate(vGpioLED1OnTask, "LED1 on", 128 * 4, NULL, 1, NULL);
   xTaskCreate(vGpioLED1OffTask, "LED1 off", 128 * 4, NULL, 1, NULL);
+  xTaskCreate(vGpioLED2IntTask, "LED2 interrupt", 128 * 4, NULL, 2, NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -159,6 +168,15 @@ int main(void)
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
+}
+
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+
+  return ch;
 }
 
 /**
@@ -332,7 +350,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
 
@@ -356,18 +374,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
 
-  // HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  // HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-    if ((GPIO_Pin == USER_Btn_Pin) && (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin)==GPIO_PIN_RESET)) {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
-    } else {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
-    }
+  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+  xSemaphoreGiveFromISR(xSemInt,&xHigherPriorityTaskWoken);
+  portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 /* USER CODE END 4 */
 
@@ -396,8 +413,8 @@ void vGpioLED1OnTask(void *argument)
   {    
     if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin) == GPIO_PIN_RESET){
       xSemaphoreTake(xSemBin, portMAX_DELAY);
+      printf("Hello !\n\r");
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
-      //vTaskDelay( xDelay );
       osDelay(pdMS_TO_TICKS(1000));
       xSemaphoreGive(xSemBin);
     }    
@@ -411,26 +428,18 @@ void vGpioLED1OffTask(void *argument)
     if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin) == GPIO_PIN_SET){
       xSemaphoreTake(xSemBin, portMAX_DELAY);
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
-      //vTaskDelay( xDelay );
       osDelay(pdMS_TO_TICKS(1000));
       xSemaphoreGive(xSemBin);   
     }    
   }
 }
 
-void vGpioLED1Task(void *argument)
+void vGpioLED2IntTask(void *argument)
 {
-  for(;;){
-    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-    osDelay(pdMS_TO_TICKS(1000));
-  }
-}
-
-void vGpioLED2Task(void *argument)
-{
-  for(;;){
+  for(;;)
+  {
+    xSemaphoreTake(xSemInt, portMAX_DELAY);    
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    osDelay(pdMS_TO_TICKS(1000));
   }
 }
 

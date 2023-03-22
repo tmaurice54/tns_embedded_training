@@ -31,6 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -40,11 +41,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart3;
-
+SPI_HandleTypeDef hspi1;
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
+uint8_t data_rec[2];
 
 /* USER CODE BEGIN PV */
-
 
 /* USER CODE END PV */
 
@@ -53,8 +54,11 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
+static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void SPIwrite (uint8_t address, uint8_t value);
+void SPIread (void);
+void SPI_Sensor_init (void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -88,26 +92,27 @@ int main(void) {
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_SPI1_Init();
 
   /* USER CODE BEGIN 2 */
-  // ButtonWrapper *myUserButton = new ButtonWrapper(USER_Btn_GPIO_Port,USER_Btn_Pin);
+  //SPI_Sensor_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1) {
-    /* USER CODE END WHILE */
-    /* USER CODE BEGIN 3 */
-
-    // If the button is pressed : turn on the LED, else turn it off
-    /*
-    if (myUserButton->isPressed()) {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_SET);
+  /* USER CODE BEGIN WHILE */  
+    SPIread();
+    if(data_rec[0]==0b01001011 && data_rec[1]==0b00000111){
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
     } else {
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin,GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
     }
-    */
+     
+    HAL_Delay(1000);
+  /* USER CODE END WHILE */
   }
+  /* USER CODE BEGIN 3 */
+  
   /* USER CODE END 3 */
 }
 
@@ -269,11 +274,67 @@ static void MX_GPIO_Init(void) {
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
+/**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+  /* USER CODE BEGIN SPI1_Init 0 */
+  /* USER CODE END SPI1_Init 0 */
+  /* USER CODE BEGIN SPI1_Init 1 */
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+  /* USER CODE END SPI1_Init 2 */
+}
+
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+void SPIwrite(uint8_t address, uint8_t value)
+{
+	uint8_t data[2];
+	data[0] = address|0x40;  // multibyte write
+	data[1] = value;
+	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);  // pull the cs pin low
+	HAL_SPI_Transmit (&hspi1, data, 2, 100);  // write data to register
+	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_SET);  // pull the cs pin high
+}
+void SPI_Sensor_init (void)
+{
+	SPIwrite(0x00, 0x00);  // data_format range= +- 4g
+}
 
-  HAL_GPIO_TogglePin(LD1_GPIO_Port,LD1_Pin);
+void SPIread(void)
+{
+	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);  // pull the pin low
+	HAL_SPI_Receive (&hspi1, data_rec, 2, 100);  // receive 6 bytes data
+	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_SET);  // pull the pin high
+}
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin)==GPIO_PIN_SET) {
+    GPIOB->ODR = 0b0000000000000000;
+  } else {
+    GPIOB->ODR = 0b0000000000000001;
+  }
 }
 /* USER CODE END 4 */
 

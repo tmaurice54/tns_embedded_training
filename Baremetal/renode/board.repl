@@ -6,6 +6,7 @@ UserButton: Miscellaneous.Button @ gpioPortC
 LD1: Miscellaneous.LED @ gpioPortB
 LD2: Miscellaneous.LED @ gpioPortB
 LD3: Miscellaneous.LED @ gpioPortB
+sensor : Sensors.TI_LM74 @ spi1
 
 gpioPortB:
     0 -> LD1@0
