@@ -1,72 +1,27 @@
-# Training for embedded systems with Renode
+# Repository to create the Embedded Training
 
-## Installing Renode
-For Windows:  (need admin rights)
-- go to [https://github.com/renode/renode/releases](https://github.com/renode/renode/releases) and download the latest version of the .msi installer. 
+## Base Folder
 
-## Installing the ARM toolchain
+Contain the intial code without fonctionnalities
 
-Assuming you run a WSL machine
+## Exercise_LED Folder
 
-### From the package manager
+### BareMetal
 
-```
-sudo apt-get install gcc-arm-none-eabi
-```
+Contains the code to create an interrupt on the userbutton.
+Each time the button is pressed/release, the LED1 is toggled.
 
-### From the sources 
-Download the ARM toolchain
+### FreeRTOS
 
-``` bash
-wget -O gcc-arm-none-eabi.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-bet1/binrel/arm-gnu-toolchain-12.2.mpacbti-bet1-x86_64-arm-none-eabi.tar.xz
-```
+Contains 2 task which turn on and turn off the LED1 every second.
 
-You can then install it in the folder of your choice and add the binaries to your path
+## Exercise_SPI Folder
 
-``` bash
-tar xf ./gcc-arm-none-eabi.tar.xz --strip-components=1 -C <FOLDER_PATH_HERE>
-echo 'export PATH=$PATH:<FOLDER_PATH_HERE>/bin' >> ~/.bashrc
-```
+### BareMetal
 
-### Testing the toolchain
+Contains the code to read the temperature on the TI_LM74 sensor.
+And a wrapper for this sensor.
 
-```
-arm-none-eabi-gcc --version
-arm-none-eabi-gdb --version
-```
+### FreeRTOS
 
-## Building the project
-
-Prerequisites: (sudo apt install) 
-- Cmake   
-- Ninja
-
->**Note**
-> 
->If the cmake version is not recent enough follow the instructions from this answer : https://askubuntu.com/a/1157132. to know your distribution : 
->`lsb_release -a`
-``` bash
-mkdir build && cd build
-cmake -G "Ninja" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
-ninja
-```
-
-### Building a specific target
-
-```bash
-# Baremetal 
-ninja Baremetal/all
-# FreeRTOS
-ninja FreeRTOS/all
-```
-
-
-## Testing the sample
-
-If renode is installed on Windows, launch `renode-test` from a powershell or cmd prompt
-
-``` powershell
-renode-test "<Demo folder location>\test\test.robot"
-```
-
-**If you use WSL to compile** : Use "\\\\wsl$\\distro_name\\home\\... as a base for the path to the robot file
+No specific code

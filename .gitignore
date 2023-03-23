@@ -1,3 +1,6 @@
 .vscode
 .cache
 build/
+Base/build/
+Exercise_LED/build
+Exercise_SPI/buil
