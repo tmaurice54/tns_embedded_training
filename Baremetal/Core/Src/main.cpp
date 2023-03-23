@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "TI_M74Wrapper.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,6 @@
 UART_HandleTypeDef huart3;
 SPI_HandleTypeDef hspi1;
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
-uint8_t data_rec[2];
 
 /* USER CODE BEGIN PV */
 
@@ -56,9 +55,7 @@ static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-void SPIwrite (uint8_t address, uint8_t value);
-void SPIread (void);
-void SPI_Sensor_init (void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -95,19 +92,19 @@ int main(void) {
   MX_SPI1_Init();
 
   /* USER CODE BEGIN 2 */
-  //SPI_Sensor_init();
+  TI_M74Wrapper tempSensor{hspi1};
+  uint16_t currentTemp;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   while (1) {
   /* USER CODE BEGIN WHILE */  
-    SPIread();
-    if(data_rec[0]==0b01001011 && data_rec[1]==0b00000111){
+    currentTemp = tempSensor.readTemp();
+    if(currentTemp==0b0100101100000111){
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
     } else {
       HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
     }
-     
     HAL_Delay(1000);
   /* USER CODE END WHILE */
   }
@@ -307,27 +304,6 @@ static void MX_SPI1_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void SPIwrite(uint8_t address, uint8_t value)
-{
-	uint8_t data[2];
-	data[0] = address|0x40;  // multibyte write
-	data[1] = value;
-	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);  // pull the cs pin low
-	HAL_SPI_Transmit (&hspi1, data, 2, 100);  // write data to register
-	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_SET);  // pull the cs pin high
-}
-void SPI_Sensor_init (void)
-{
-	SPIwrite(0x00, 0x00);  // data_format range= +- 4g
-}
-
-void SPIread(void)
-{
-	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);  // pull the pin low
-	HAL_SPI_Receive (&hspi1, data_rec, 2, 100);  // receive 6 bytes data
-	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_SET);  // pull the pin high
-}
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(HAL_GPIO_ReadPin(LD1_GPIO_Port,LD1_Pin)==GPIO_PIN_SET) {
