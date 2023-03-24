@@ -98,6 +98,7 @@ int main(void) {
   /* Infinite loop */
   while (1) {
   /* USER CODE BEGIN WHILE */  
+  
     HAL_Delay(1000);
   /* USER CODE END WHILE */
   }

@@ -1,4 +1,4 @@
-set(EXECUTABLE Baremetal.out)
+set(EXECUTABLE SPIBaremetal.out)
 
 set(GENERATED_FILES 
     Core/Inc/main.h

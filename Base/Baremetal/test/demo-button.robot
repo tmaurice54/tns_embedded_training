@@ -17,7 +17,7 @@ Create Machine
 
 *** Test Cases ***
 Button Press Should Turn Led On
-    Create Machine           @${CURDIR}/../../build/Baremetal/Baremetal.out
+    Create Machine           @${CURDIR}/../../../build/Base/Baremetal/Baremetal.out
     Start Emulation
     Sleep                    100ms
     Execute Command          sysbus.gpioPortC.UserButton Press
@@ -26,7 +26,7 @@ Button Press Should Turn Led On
     Should Contain           ${ledstate}    True
 
 Button PressAndRelease Should Turn Led Off
-    Create Machine           @${CURDIR}/../../build/Baremetal/Baremetal.out
+    Create Machine           @${CURDIR}/../../../build/Base/Baremetal/Baremetal.out
     Start Emulation
     Sleep                    100ms
     Execute Command          sysbus.gpioPortC.UserButton Press

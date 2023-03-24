@@ -1,4 +1,4 @@
-set(EXECUTABLE FreeRTOS.out)
+set(EXECUTABLE SPIFreeRTOS.out)
 
 set(GENERATED_FILES
 

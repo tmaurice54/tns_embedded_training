@@ -1,4 +1,4 @@
-set(EXECUTABLE FreeRTOS.out)
+set(EXECUTABLE LEDFreeRTOS.out)
 
 set(GENERATED_FILES
 

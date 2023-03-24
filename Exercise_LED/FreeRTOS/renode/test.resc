@@ -1,4 +1,0 @@
-mach create "Test"
-machine LoadPlatformDescription @C:/Users/t.maurice/project/tns_embedded_training/Exercise_LED/FreeRTOS/renode/board.repl
-sysbus LoadELF @C:/Users/t.maurice/project/tns_embedded_training/Exercise_LED/build/FreeRTOS/FreeRTOS.out
-start

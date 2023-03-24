@@ -369,8 +369,12 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {    
-    HAL_GPIO_TogglePin(LD1_GPIO_Port,LD1_Pin);
-    osDelay(pdMS_TO_TICKS(1000));
+    if(HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin)==GPIO_PIN_SET)
+    {
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
+    } else {
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
+    }
   }
   /* USER CODE END 5 */
 }

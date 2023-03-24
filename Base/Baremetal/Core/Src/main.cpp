@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,12 +96,20 @@ int main(void) {
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  while (1) {
   /* USER CODE BEGIN WHILE */  
+  while (1) {
+    if(HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin)==GPIO_PIN_SET)
+    {
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_SET);
+    } else {
+      HAL_GPIO_WritePin(LD1_GPIO_Port,LD1_Pin,GPIO_PIN_RESET);
+    }
 
   /* USER CODE END WHILE */
-  }
+  
   /* USER CODE BEGIN 3 */
+  }
+  
   
   /* USER CODE END 3 */
 }

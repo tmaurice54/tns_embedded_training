@@ -28,17 +28,19 @@ void TI_M74Wrapper::init()
 float TI_M74Wrapper::readTemp()
 {
     uint8_t data[2];
-    uint16_t temp, tempIf;
+    int16_t temp;
+    
     HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);  // pull the pin low
 	HAL_SPI_Receive (&hspi, data, 2, 100);  // receive 2 bytes data
 	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_6, GPIO_PIN_SET);  // pull the pin high
-    temp = ((uint16_t)data[0] << 8) | data[1];
-    tempIf = temp;
-    if((tempIf >> 15)==1){
-        return -(((~temp >> 3)+0b0000000000000001)*0.0625);
-    } else {
-        return (temp >> 3)*0.0625;
+
+    temp = ((int16_t)data[0] << 8) | data[1];
+    
+    if(temp > 0x7000){
+        temp = temp & 0x7FFF;
     }
+    
+    return (temp>>3)*0.0625;
 }
 
 void TI_M74Wrapper::writeData(uint8_t address, uint8_t value)

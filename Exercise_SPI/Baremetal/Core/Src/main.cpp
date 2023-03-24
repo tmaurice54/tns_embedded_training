@@ -97,8 +97,8 @@ int main(void) {
   /* USER CODE END 2 */
 
   /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1) {
-  /* USER CODE BEGIN WHILE */  
     currentTemp = tempSensor.readTemp();
     if(currentTemp==150) // IF temperature is 150° put the led1 ON
     {
@@ -108,8 +108,9 @@ int main(void) {
     }
     HAL_Delay(1000);
   /* USER CODE END WHILE */
-  }
+
   /* USER CODE BEGIN 3 */
+  }
   
   /* USER CODE END 3 */
 }

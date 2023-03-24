@@ -1,4 +1,4 @@
-set(EXECUTABLE Baremetal.out)
+set(EXECUTABLE LEDBaremetal.out)
 
 set(GENERATED_FILES 
     Core/Inc/main.h
