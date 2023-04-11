@@ -1,27 +1,18 @@
-# Repository to create the Embedded Training
+# Repository of the Embedded Training
 
-## Base Folder
+Welcome to the Embedded Training.
+In this repository you will find exercises to learn and discover embedded development.
 
-Contain the intial code without fonctionnalities
+## Exercises folder
 
-## Exercise_LED Folder
+Contains all the exercises of this training.
+Each exercise is made to learn one or multiple specific point.
 
-### BareMetal
+## RenodeConfig folder
 
-Contains the code to create an interrupt on the userbutton.
-Each time the button is pressed/release, the LED1 is toggled.
+In this folder you will find the necessary files to use Renode on this training.
 
-### FreeRTOS
+## Doc folder
 
-Contains 2 task which turn on and turn off the LED1 every second.
-
-## Exercise_SPI Folder
-
-### BareMetal
-
-Contains the code to read the temperature on the TI_LM74 sensor.
-And a wrapper for this sensor.
-
-### FreeRTOS
-
-No specific code
+In this folder you will find every information you need to do this training such as
+Renode setup and tutorial, how flash on the STM32 board ...

@@ -1,6 +1,7 @@
 .vscode
 .cache
-build/
-Base/build/
-Exercise_LED/build
-Exercise_SPI/buil
+Exo_Base
+Exercises/Exercise_FreeRTOS/build/
+Exercises/Exercise_GPIO/build/
+Exercises/Exercise_SPI/build/
+Exercises/Exercise_LinkerScript/build
