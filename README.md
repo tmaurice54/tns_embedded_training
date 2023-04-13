@@ -11,8 +11,9 @@ Each exercise is made to learn one or multiple specific point.
 ## RenodeConfig folder
 
 In this folder you will find the necessary files to use Renode on this training.
+You can find the configurations files to start the machine on Renode.
 
 ## Doc folder
 
 In this folder you will find every information you need to do this training such as
-Renode setup and tutorial, how flash on the STM32 board ...
+Renode setup and tutorial, how flash and debug the STM32 board , etc.
