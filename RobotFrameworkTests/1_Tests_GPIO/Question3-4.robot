@@ -7,16 +7,13 @@ Resource                      ${RENODEKEYWORDS}
 
 *** Keywords ***
 Create Machine
-    [Arguments]              ${hex_file}
     Execute Command          mach create
     Execute Command          machine LoadPlatformDescription @${CURDIR}/../../RenodeConfig/board.repl
-    Execute Command          sysbus LoadELF @${hex_file}
-    Execute Command          sysbus Tag <0x40023C00, 0x40023C07> "FLASH:ACR" 0x5
-    Execute Command          sysbus Tag <0x50000010, 0x5000003f> "USB:RESET" 0x80000000
+    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises/1_Exercise_GPIO/build/1_Exercise_GPIO/Exercise_GPIO.elf
 
 *** Test Cases ***
 Button Press Should Turn Led On
-    Create Machine           @${CURDIR}/../../Exercises/1_Exercise_GPIO/build/1_Exercise_GPIO/Exercise_GPIO.elf
+    Create Machine           
     Start Emulation
     Sleep                    100ms
     Execute Command          sysbus.gpioPortC.UserButton Press
@@ -25,7 +22,7 @@ Button Press Should Turn Led On
     Should Contain           ${ledstate}    True
 
 Button PressAndRelease Should Turn Led Off
-    Create Machine           @${CURDIR}/../../Exercises/1_Exercise_GPIO/build/1_Exercise_GPIO/Exercise_GPIO.elf
+    Create Machine
     Start Emulation
     Sleep                    100ms
     Execute Command          sysbus.gpioPortC.UserButton Press

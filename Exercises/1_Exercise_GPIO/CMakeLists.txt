@@ -1,10 +1,6 @@
 set(EXECUTABLE Exercise_GPIO.elf)
 
 set(GENERATED_FILES 
-    Core/Inc/main.h
-    Core/Inc/stm32f4xx_hal_conf.h
-    Core/Inc/stm32f4xx_it.h
-
     Core/Src/main.cpp
     Core/StmFiles/syscalls.c
     Core/StmFiles/sysmem.c

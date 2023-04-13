@@ -39,12 +39,15 @@ Prerequisites: (sudo apt install)
 
 Open a wsl terminal and go to the exercise folder you want to build.
 Then execute :
-"""bash
+
+```bash
 ./build.sh
-"""
+```
+
 wich will create a build folder and put the executable in it.
 
 If you just want to compile again after you have done some modifications you can go in the build folder and execute :
-"""bash
+
+```bash
 ninja
-"""
+```

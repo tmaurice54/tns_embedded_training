@@ -5,3 +5,5 @@ Exercises/1_Exercise_GPIO/build/
 Exercises/2_Exercise_Sensor/build/
 Exercises/3_Exercise_FreeRTOS/build/
 Exercises/4_Exercise_LinkerScript/build
+
+RobotFrameworkTests/TEST/

@@ -41,7 +41,7 @@ But we also need to know when the button is released to turn off the LEDs (risin
 The mode GPIO_MODE_IT_RISING_FALLING is what we need to achieve that.
 When an interruption is triggered, the MCU will execute a handler, which is called HAL_GPIO_EXTI_IRQHandler : 
 
-"""cpp
+```cpp
 void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
 {
   /* EXTI line interrupt detected */
@@ -50,7 +50,8 @@ void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
     HAL_GPIO_EXTI_Callback(GPIO_Pin);
   }
-"""
+}
+```
 
 This code will check that the interrupt has been triggered, clear the flag to make sure that the interrupt is not triggered continuously and then call our callback.
 This callback can be user defined and we will redefine it in the main file.
