@@ -17,19 +17,21 @@ Useful links :
 
 [Information about linker script](https://users.informatik.haw-hamburg.de/~krabat/FH-Labor/gnupro/5_GNUPro_Utilities/c_Using_LD/ldLinker_scripts.html)
 
-## Question 1 : [Real board]
+## Question 1 : Find the signature [Renode and Real board]
 
 First of all you can build the exercise as usual.  
 But the executable you will create contain a new section.  
 Using the debugger and the informations given above try to find this new section in the memory and find the message I wrote.  
 
-## Question 2
+## Question 2 : Change the signature 1 [Renode and Real board]
 
 Now that you have find the signature I have done, try to modifie it in the .ld file.  
 You have to find the right section and modifie the content.  
 Then you can use the debugger again and see that the signature is now modified.
 
-## Question 3
+You can also change the signature and use the RobotFramework test.  
+
+## Question 3 : Change the signature 2 [Renode and Real board]
 
 This way to change the signature works but is not interesting.  
 The linker script should be used just to allocate memory for the signature but not to write it.  

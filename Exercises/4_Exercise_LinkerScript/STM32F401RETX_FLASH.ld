@@ -178,7 +178,7 @@ SECTIONS
   .signature :
   {
   	. = ALIGN(4);
-  	LONG(0x646F6F67);
+  	LONG(0xDEADBEEF);
   } >SIGN
   
   /* Remove information from the compiler libraries */
