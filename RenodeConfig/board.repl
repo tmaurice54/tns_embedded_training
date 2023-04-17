@@ -7,3 +7,5 @@ LD2: Miscellaneous.LED @ gpioPortA
 
 gpioPortA:
     5 -> LD2@0
+
+sensor : Sensors.TI_LM74 @ spi2

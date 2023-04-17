@@ -68,7 +68,8 @@ static void MX_SPI2_Init(void);
  */
 int main(void) {
   /* USER CODE BEGIN 1 */
-
+    uint8_t data[2];
+    int16_t temp;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -100,7 +101,9 @@ int main(void) {
   /* USER CODE BEGIN WHILE */
   while (1) {
     /* USER CODE END WHILE */
-
+    HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);  // pull the pin low
+	  HAL_SPI_Receive (&hspi2, data, 2, 100);  // receive 2 bytes data
+	  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_SET);  // pull the pin high
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

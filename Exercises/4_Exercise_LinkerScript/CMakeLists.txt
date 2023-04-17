@@ -90,3 +90,9 @@ add_custom_command(TARGET ${EXECUTABLE}
                     -i 
                     ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.c
                     ${CMAKE_CURRENT_LIST_DIR}/Core/Inc/main.h)
+
+
+# Add signature 
+# add_custom_command(TARGET ${EXECUTABLE}
+#                    POST_BUILD
+#                    COMMAND arm-none-eabi-objcopy --update-section .signature_section=${CMAKE_CURRENT_LIST_DIR}/signatureFile ${EXECUTABLE} Exercise_LinkerScript_Signed.elf)
