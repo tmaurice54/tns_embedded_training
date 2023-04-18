@@ -14,6 +14,6 @@ Create 2 tasks controlled by sempahore/mutex to blink the LED
 
 Create a task controlled by an interruption  
 
-## Question 4 
+## Question 4
 
 Filtered values for SPI

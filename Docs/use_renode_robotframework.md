@@ -7,9 +7,8 @@ This document is about the Robot Framework and Renode, their purpose and how the
 Renode is an open source software development framework with commercial support from Antmicro that lets you develop, debug and test multi-node device systems reliably, scalably and effectively.
 In this training we will use Renode to simulate the STM32 board.
 
-To install renode :
+To install renode (for Windows) :
 
-For Windows:  (need admin rights)
 - go to [https://github.com/renode/renode/releases](https://github.com/renode/renode/releases) and download the latest version of the .msi installer.
 
 Renode has an graphic interface with a Log window and a window for the Renode terminal.

@@ -20,8 +20,9 @@ Useful links :
 ## Question 1 : Find the signature [Renode and Real board]
 
 First of all you can build the exercise as usual.  
-But the executable .elf that you will create contain a new section.  
-Using the debugger and the informations given above try to find this new section in the memory and find the signature I wrote.  
+However, the executable .elf that you will create contain a new section.  
+Using the debugger and the informations given above try to find this new section in the memory at the address : 0x0801E900 and find the message I wrote.  
+You can also create a programm that will read at this address and print it in a serial terminal.  
 
 ## Question 2 : Change the signature 1 [Renode and Real board]
 
@@ -36,6 +37,6 @@ You can also change the signature and use the RobotFramework test to test if the
 The way to change the signature just before works but is not interesting.  
 The linker script should be used just to allocate memory and give the starting address for the signature but not to write it.  
 To sign your executable you will use the command ```arm-none-eabi-objcopy```.  
-Create a new file and write in it the signature you want.  
-Then use this command to write this content in the memory allocated for the signature.  
+Create a new file and write in it the signature you want to write.  
+Then, use the command to append the signature inside the .elf file.  
 You can check the result the same way as before.  
