@@ -12,4 +12,8 @@ Create 2 tasks controlled by sempahore/mutex to blink the LED
 
 ## Question 3
 
-Add an interruption that will block the tasks when you push the UserButton, and resume them when you press again
+Create a task controlled by an interruption  
+
+## Question 4 
+
+Filtered values for SPI

@@ -52,7 +52,7 @@ But this kind of code isn't practical and developper usually create an interface
 In a new file create an interface for this sensor wich will contain a function readTemp() to read the temperature.
 After that you will create an instance in your main file and try to read the temperature value.  
 
-## Question 3 : Filter the values [Renode]
+## Question 3 : Filter the values [Renode] (Need FreeRTOS)
 
 When working with a real temperature sensor, the values we get can be noisy.  
 So the idea is to read the temperature often and then work with a filtered value from those data.  
