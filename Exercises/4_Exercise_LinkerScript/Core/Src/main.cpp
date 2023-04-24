@@ -21,8 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,16 +51,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-#ifdef __GNUC__
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif
 
-PUTCHAR_PROTOTYPE {
-  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
-  return ch;
-}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -99,14 +89,13 @@ int main(void) {
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  char *buf = (char *)0x0801E900;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
     /* USER CODE END WHILE */
-    printf("%.4s\r\n", buf);
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     HAL_Delay(1000);
     /* USER CODE BEGIN 3 */

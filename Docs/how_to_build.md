@@ -10,7 +10,8 @@ Assuming you run a WSL machine
 sudo apt-get install gcc-arm-none-eabi
 ```
 
-### From the sources 
+### From the sources
+
 Download the ARM toolchain
 
 ``` bash
@@ -34,7 +35,8 @@ arm-none-eabi-gdb --version
 ## Building the exercise
 
 Prerequisites: (sudo apt install)
-- Cmake   
+
+- Cmake  
 - Ninja
 
 Open a wsl terminal and go to the exercise folder you want to build.

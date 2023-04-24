@@ -10,9 +10,6 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(Drivers)
-add_subdirectory(Middlewares)
-
 set(EXECUTABLE Exercise_FreeRTOS.elf)
 
 set(GENERATED_FILES 
@@ -28,7 +25,7 @@ set(GENERATED_FILES
     Core/StmFiles/stm32f4xx_it.c
     Core/StmFiles/system_stm32f4xx.c
     Core/StmFiles/freertos.c
-    Core/Startup/startup_stm32f446zetx.s
+    Core/Startup/startup_stm32f401retx.s
 )
 
 add_executable(${EXECUTABLE} ${GENERATED_FILES})
@@ -37,7 +34,7 @@ target_link_libraries(${EXECUTABLE} Drivers Middlewares)
 
 target_compile_definitions(${EXECUTABLE} PRIVATE
     -DUSE_HAL_DRIVER
-    -DSTM32F446xx
+    -DSTM32F401xE
 )
 
 target_include_directories(${EXECUTABLE} PUBLIC
@@ -81,11 +78,11 @@ add_custom_command(TARGET ${EXECUTABLE}
         COMMAND arm-none-eabi-size ${EXECUTABLE})
 
 # Static code analyzer
-add_custom_command(TARGET ${EXECUTABLE}
-                    PRE_BUILD
-                    COMMAND cppcheck 
-                    ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.cpp 
-                    ${CMAKE_CURRENT_LIST_DIR}/Core/Inc/main.h)
+#add_custom_command(TARGET ${EXECUTABLE}
+#                    PRE_BUILD
+#                    COMMAND cppcheck 
+#                    ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.cpp 
+#                    ${CMAKE_CURRENT_LIST_DIR}/Core/Inc/main.h)
 
 # Code formatage                    
 add_custom_command(TARGET ${EXECUTABLE}

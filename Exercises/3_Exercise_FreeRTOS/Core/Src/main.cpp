@@ -43,21 +43,15 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
 
-/* Definitions for turnOnTask */
-osThreadId_t turnOnTaskHandle;
-const osThreadAttr_t turnOnTask_attributes = {
-    .name = "turnOnTask",
+/* Definitions for defaultTask */
+osThreadId_t blinkTaskHandle;
+const osThreadAttr_t blinkTask_attributes = {
+    .name = "blinkTask",
     .stack_size = 128 * 4,
     .priority = (osPriority_t)osPriorityNormal,
 };
-/* Definitions for turnOffTask */
-osThreadId_t turnOffTaskHandle;
-const osThreadAttr_t turnOffTask_attributes = {
-    .name = "turnOffTask",
-    .stack_size = 128 * 4,
-    .priority = (osPriority_t)osPriorityNormal,
-};
-/* Definitions for myBinarySem */
+
+/* Definitions for myBinarySem01 */
 osSemaphoreId_t myBinarySemHandle;
 const osSemaphoreAttr_t myBinarySem_attributes = {.name = "myBinarySem"};
 /* USER CODE BEGIN PV */
@@ -68,8 +62,6 @@ const osSemaphoreAttr_t myBinarySem_attributes = {.name = "myBinarySem"};
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-void StartTurnOnTask(void *argument);
-void StartTurnOffTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -120,12 +112,8 @@ int main(void) {
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
-  /* Create the semaphores(s) */
-  /* creation of myBinarySem */
-  myBinarySemHandle = osSemaphoreNew(1, 1, &myBinarySem_attributes);
-
   /* USER CODE BEGIN RTOS_SEMAPHORES */
-  osSemaphoreRelease(myBinarySemHandle);
+  /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -136,16 +124,9 @@ int main(void) {
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
-  /* Create the thread(s) */
-  /* creation of turnOnTask */
-  turnOnTaskHandle = osThreadNew(StartTurnOnTask, NULL, &turnOnTask_attributes);
-
-  /* creation of turnOffTask */
-  turnOffTaskHandle =
-      osThreadNew(StartTurnOffTask, NULL, &turnOffTask_attributes);
-
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  blinkTaskHandle =
+      osThreadNew(blinkTask, NULL, &blinkTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -203,7 +184,7 @@ void SystemClock_Config(void) {
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK) {
     Error_Handler();
   }
 }
@@ -259,7 +240,7 @@ static void MX_GPIO_Init(void) {
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
@@ -270,54 +251,12 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* USER CODE END MX_GPIO_Init_2 */
-}
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartTurnOnTask */
-/**
- * @brief  Function implementing the turnOnTask thread.
- * @param  argument: Not used
- * @retval None
- */
-/* USER CODE END Header_StartTurnOnTask */
-void StartTurnOnTask(void *argument) {
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for (;;) {
-    if (HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin) == GPIO_PIN_RESET) {
-      osSemaphoreAcquire(myBinarySemHandle, osWaitForever);
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-      osDelay(500);
-      osSemaphoreRelease(myBinarySemHandle);
-    }
-  }
-  /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_StartTurnOffTask */
-/**
- * @brief Function implementing the turnOffTask thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_StartTurnOffTask */
-void StartTurnOffTask(void *argument) {
-  /* USER CODE BEGIN StartTurnOffTask */
-  /* Infinite loop */
-  for (;;) {
-    if (HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin) == GPIO_PIN_SET) {
-      osSemaphoreAcquire(myBinarySemHandle, osWaitForever);
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-      osDelay(500);
-      osSemaphoreRelease(myBinarySemHandle);
-    }
-  }
-  /* USER CODE END StartTurnOffTask */
 }
 
 /**

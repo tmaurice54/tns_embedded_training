@@ -89,11 +89,13 @@ int main(void) {
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
-  MX_TIM2_Init();
-  /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 
-  TIM2->CCR1 = 50;
+  // Decomment this for the PWM Exercises
+  // MX_TIM2_Init();
+  // HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+
+  /* USER CODE BEGIN 2 */
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -264,8 +266,10 @@ static void MX_GPIO_Init(void) {
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+  // Decomment this for the question on interruption
+  // HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  // HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* USER CODE END MX_GPIO_Init_2 */

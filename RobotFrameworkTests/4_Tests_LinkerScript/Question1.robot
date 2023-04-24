@@ -17,4 +17,4 @@ Signature Should Be Changed
     Start Emulation
     Sleep                    100ms
     ${signature}              Execute Command    sysbus ReadDoubleWord 0x0801E900
-    Should Not Contain           ${signature}    0xDEADBEEF
+    Should Not Contain           ${signature}    0x444F4F47

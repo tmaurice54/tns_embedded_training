@@ -8,8 +8,7 @@ Ozone is a free Software that allow the user to flash code and read the memory w
 
 First we have to connect the j-link to the board. For that we will use the SWD port of the board. You can look at the following pictures for the connection :  
 
-![Connection Scheme](./ressources/)
-
+![Connection Scheme](./ressources/Connection.PNG)
 
 If you need more information you can look at [this link](https://mcuoneclipse.com/2015/08/22/debugging-stm32f103rb-nucleo-board-with-with-segger-j-link/).  
 
@@ -23,7 +22,7 @@ Then you can follow the installation steps.
 ### Flash and debug with Ozone
 
 Launch Ozone and create a new project.  
-Select ```STM32F401RE``` as device and ```Cortex-M4``` as register set.  
+Select `STM32F401RE` as device and `Cortex-M4` as register set.  
 
 ![Ozone1](ressources/Ozone1.PNG)
 
@@ -35,12 +34,12 @@ Select the executable
 
 ![Ozone3](ressources/Ozone3.PNG)
 
-And for the other settings select ```Do not set```
+And for the other settings select `Do not set`
 
 ![Ozone4](ressources/Ozone4.PNG)
 
 Now your project is ready.  
-You can press the button ```Download and reset programm``` on the top-left  
+You can press the button `Download and reset programm` on the top-left  
 
 ![Ozone5](ressources/Ozone5.PNG)
 
@@ -76,4 +75,4 @@ CODE
 printf("%s\r\n", bufferToWrite);
 ```
 
-This code will rewrite the ```fputc()``` function wich is used by the ```printf()``` function. Now your prints are redirect to the UART2. You can then use a serial terminal such as putty and read the data print.
+This code will rewrite the `fputc()` function wich is used by the `printf()` function. Now your prints are redirect to the UART2. You can then use a serial terminal such as putty and read the data print.

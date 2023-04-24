@@ -96,11 +96,12 @@ int main(void) {
   /* USER CODE BEGIN WHILE */
   while (1) {
     /* USER CODE END WHILE */
-    if (HAL_GPIO_ReadPin(LD2_GPIO_Port,B1_Pin) == GPIO_PIN_SET) {
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
+    if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET) {
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
     } else {
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     }
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -144,7 +145,7 @@ void SystemClock_Config(void) {
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK) {
     Error_Handler();
   }
 }
@@ -200,7 +201,7 @@ static void MX_GPIO_Init(void) {
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 

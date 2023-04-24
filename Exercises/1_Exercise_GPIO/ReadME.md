@@ -32,6 +32,8 @@ Create a function that will read the value of the button.
 If the button is pressed, turn on LED and if the button is not pressed, turn off the LED.
 Then call this function in the main function.
 
+(Caution : On renode a button pressed mean 1 when it actually mean 0 on the real board)
+
 ## Question 4 : Use button with interruption mode [Renode and Real Board]
 
 Same goal than for the previous question but now when the button is pressed it will create an interruption so we don't need to permanently check if the button is pressed on the infinite loop.
@@ -39,6 +41,7 @@ Same goal than for the previous question but now when the button is pressed it w
 As the button is pressed, the voltage of the pin will go to zero, so we need to detect a falling edge on the value of the voltage.
 But we also need to know when the button is released to turn off the LEDs (rising edge).
 The mode `GPIO_MODE_IT_RISING_FALLING` is what we need to achieve that.
+Also you will need to decomment some code in the GPIO init function to allow the interruption on the button port/pin.
 When an interruption is triggered, the MCU will execute a handler, which is called `HAL_GPIO_EXTI_IRQHandler` :
 
 ```cpp
@@ -67,7 +70,7 @@ However PWM consist of two main components: the Duty cycle and the Frequency.
 Duty cycle describes the amount of time, the signal is in HIGH state as a percentage of total time, it takes to complete one cycle.  
 Frequency describes how fast the PWM completes a cycle and therefore how fast it switches between HIGH and LOW.  
 
-You can find in the main file, in the ```MX_TIM2_Init``` function, that the Timer2 is already initiate with good values.  
+You can find in the main file, in the `MX_TIM2_Init` function, that the Timer2 is already initiate with good values (You will have to call this function in the main function).
 The prescaler of 72 will set the time clock of the timer to 1MHz as the original clock is 72MHz.  
 And the period of 100 will set the frequency of to 10kHz.  
 Now you can change the value of the TIM2->CRR1 register wich will change the duty cycle.  

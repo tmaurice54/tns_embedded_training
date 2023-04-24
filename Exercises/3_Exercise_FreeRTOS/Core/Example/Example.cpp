@@ -6,7 +6,7 @@
  ******************************************************************************
  * @attention
  *
- * Copyright (c) 2022 STMicroelectronics.
+ * Copyright (c) 2023 STMicroelectronics.
  * All rights reserved.
  *
  * This software is licensed under terms that can be found in the LICENSE file
@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <semphr.h>
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,18 +42,25 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
-
-PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
+osThreadId_t interruptTaskHandle;
+const osThreadAttr_t interruptTask_attributes = {
+    .name = "interruptTask",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t)osPriorityAboveNormal1,
+};
 
-const osThreadAttr_t defaultTask_attributes = {
-    .name = "defaultTask",
+osThreadId_t counterTaskHandle;
+const osThreadAttr_t counterTask_attributes = {
+    .name = "counterTask",
     .stack_size = 128 * 4,
     .priority = (osPriority_t)osPriorityNormal,
 };
+
+/* Definitions for myBinarySem01 */
+osSemaphoreId_t myBinarySem01Handle;
+const osSemaphoreAttr_t myBinarySem01_attributes = {.name = "myBinarySem01"};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -61,19 +68,27 @@ const osThreadAttr_t defaultTask_attributes = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART3_UART_Init(void);
-static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_USART2_UART_Init(void);
-void StartDefaultTask(void *argument);
-void vGpioLED1OnTask(void *argument);
-void vGpioLED1OffTask(void *argument);
-/* USER CODE BEGIN PFP */
+void InterruptTask(void *argument);
+void CountTask(void *argument);
 
+/* USER CODE BEGIN PFP */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+
+PUTCHAR_PROTOTYPE {
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+  return ch;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-SemaphoreHandle_t xSemBin;
+
 /* USER CODE END 0 */
 
 /**
@@ -104,8 +119,6 @@ int main(void) {
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
@@ -115,9 +128,12 @@ int main(void) {
   osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_MUTEX */
-  xSemBin = xSemaphoreCreateBinary();
-  xSemaphoreGive(xSemBin);
+  /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* creation of myBinarySem01 */
+  myBinarySem01Handle = osSemaphoreNew(1, 0, &myBinarySem01_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -131,23 +147,18 @@ int main(void) {
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
-  /* Create the thread(s) */
-  /* creation of defaultTask */
-  // defaultTaskHandle = osThreadNew(StartDefaultTask, NULL,
-  // &defaultTask_attributes);
-
   /* USER CODE BEGIN RTOS_THREADS */
-  xTaskCreate(vGpioLED1OnTask, "LED1 on", 128 * 4, NULL, 1, NULL);
-  xTaskCreate(vGpioLED1OffTask, "LED1 off", 128 * 4, NULL, 1, NULL);
+  interruptTaskHandle =
+      osThreadNew(InterruptTask, NULL, &interruptTask_attributes);
+  counterTaskHandle = osThreadNew(InterruptTask, NULL, &counterTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
-  vTaskStartScheduler();
+  /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
-  // osKernelStart();
-
+  osKernelStart();
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -170,20 +181,20 @@ void SystemClock_Config(void) {
   /** Configure the main internal regulator output voltage
    */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
 
   /** Initializes the RCC Oscillators according to the specified parameters
    * in the RCC_OscInitTypeDef structure.
    */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 168;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 16;
+  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
   RCC_OscInitStruct.PLL.PLLQ = 7;
-  RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
     Error_Handler();
   }
@@ -194,8 +205,8 @@ void SystemClock_Config(void) {
                                 RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK) {
     Error_Handler();
@@ -233,178 +244,63 @@ static void MX_USART2_UART_Init(void) {
 }
 
 /**
- * @brief USART3 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_USART3_UART_Init(void) {
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
-}
-
-/**
- * @brief USB_OTG_FS Initialization Function
- * @param None
- * @retval None
- */
-static void MX_USB_OTG_FS_PCD_Init(void) {
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 0 */
-
-  /* USER CODE END USB_OTG_FS_Init 0 */
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 1 */
-
-  /* USER CODE END USB_OTG_FS_Init 1 */
-  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hpcd_USB_OTG_FS.Init.dev_endpoints = 6;
-  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
-  if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USB_OTG_FS_Init 2 */
-
-  /* USER CODE END USB_OTG_FS_Init 2 */
-}
-
-/**
  * @brief GPIO Initialization Function
  * @param None
  * @retval None
  */
 static void MX_GPIO_Init(void) {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOG_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LD1_Pin | LD3_Pin | LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin,
-                    GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : USER_Btn_Pin */
-  GPIO_InitStruct.Pin = USER_Btn_Pin;
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD1_Pin LD3_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = LD1_Pin | LD3_Pin | LD2_Pin;
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
-  GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(USB_PowerSwitchOn_GPIO_Port, &GPIO_InitStruct);
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
-  /*Configure GPIO pin : USB_OverCurrent_Pin */
-  GPIO_InitStruct.Pin = USB_OverCurrent_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
-/* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+  osSemaphoreRelease(myBinarySem01Handle);
+}
 
-/* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
- * @brief  Function implementing the defaultTask thread.
- * @param  argument: Not used
- * @retval None
- */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument) {
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
+void InterruptTask(void *argument) {
   for (;;) {
-    // HAL_GPIO_TogglePin(LD1_GPIO_Port,LD1_Pin);
-    osDelay(pdMS_TO_TICKS(1000));
+    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
   }
-  /* USER CODE END 5 */
 }
 
-void vGpioLED1OnTask(void *argument) {
+void CountTask(void *argument) {
+  int count = 0;
   for (;;) {
-    if (HAL_GPIO_ReadPin(LD1_GPIO_Port, LD1_Pin) == GPIO_PIN_RESET) {
-      xSemaphoreTake(xSemBin, portMAX_DELAY);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-      osDelay(pdMS_TO_TICKS(1000));
-      xSemaphoreGive(xSemBin);
-    }
+    printf("%d\r\n", count);
+    count++;
+    osDelay(1000);
   }
-}
-
-void vGpioLED1OffTask(void *argument) {
-  for (;;) {
-    if (HAL_GPIO_ReadPin(LD1_GPIO_Port, LD1_Pin) == GPIO_PIN_SET) {
-      xSemaphoreTake(xSemBin, portMAX_DELAY);
-      HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-      osDelay(pdMS_TO_TICKS(1000));
-      xSemaphoreGive(xSemBin);
-    }
-  }
-}
-
-/**
- * @brief  Period elapsed callback in non blocking mode
- * @note   This function is called  when TIM2 interrupt took place, inside
- * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
- * a global variable "uwTick" used as application time base.
- * @param  htim : TIM handle
- * @retval None
- */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM2) {
-    HAL_IncTick();
-  }
-  /* USER CODE BEGIN Callback 1 */
-
-  /* USER CODE END Callback 1 */
 }
 
 /**

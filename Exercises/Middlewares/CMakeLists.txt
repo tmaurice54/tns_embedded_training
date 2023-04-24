@@ -16,7 +16,7 @@ set(MIDDLEWARES_FILES
 add_library(${MODULE_NAME} ${MIDDLEWARES_FILES})
 
 target_include_directories(${MODULE_NAME} PUBLIC
-    ${PROJECT_SOURCE_DIR}/Core/Inc
+    ${PROJECT_SOURCE_DIR}/3_Exercise_FreeRTOS/Core/Inc
     ${PROJECT_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     ${PROJECT_SOURCE_DIR}/Drivers/CMSIS/Include
     ${PROJECT_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Inc
@@ -37,10 +37,10 @@ target_compile_options(${MODULE_NAME} PRIVATE
 )
 target_compile_definitions(${MODULE_NAME} PRIVATE
     -DUSE_HAL_DRIVER
-    -DSTM32F446xx
+    -DSTM32F401xE
 )
 target_link_options(${MODULE_NAME} PRIVATE
-    -T${CMAKE_SOURCE_DIR}/STM32F446ZETX_FLASH.ld
+    -T${CMAKE_SOURCE_DIR}/STM32F401RETX_FLASH.ld
     -mcpu=cortex-m4
     -mthumb
     -mfpu=fpv4-sp-d16

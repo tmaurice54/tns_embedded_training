@@ -4,14 +4,14 @@ In this exercise you will learn what is a linker script and how to use it.
 A linker script is a file, here with the .ld exentension, that tells the linker which sections to include in the output file, as well as which order to put them in, what type of file is to be produced, and what is to be the address of the first instruction.  
 
 The linker scripts for STM32 project usually contains 2 memories definition : FLASH and RAM.  
-Those memories definition are composed of the start address and the size, for example  ```FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 500K```.  
+Those memories definition are composed of the start address and the size, for example  `FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 500K`.  
 They will contains sections which will determinate where are the data/functions in the memory.  
 
 Useful information :
 
-The command ```readelf``` can give a lot of information about .elf files, such as information about the different sections in the file.  
+The command `readelf` can give a lot of information about .elf files, such as information about the different sections in the file.  
 
-The command ```objcopy``` allows the user to copy and modify a file, as changing its extension or changing its data in it ...
+The command `objcopy` allows the user to copy and modify a file, as changing its extension or changing its data in it ...
 
 Useful links :  
 
@@ -36,7 +36,7 @@ You can also change the signature and use the RobotFramework test to test if the
 
 The way to change the signature just before works but is not interesting.  
 The linker script should be used just to allocate memory and give the starting address for the signature but not to write it.  
-To sign your executable you will use the command ```arm-none-eabi-objcopy```.  
+To sign your executable you will use the command `arm-none-eabi-objcopy`.  
 Create a new file and write in it the signature you want to write.  
 Then, use the command to append the signature inside the .elf file.  
 You can check the result the same way as before.  
