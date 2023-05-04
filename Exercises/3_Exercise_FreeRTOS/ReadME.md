@@ -24,7 +24,7 @@ Useful links :
 
 Your first question will be to create a task (called Thread in CMSIS but Task by FreeRTOS) that will blink a the user LED.
 To achieve that the main file contains already the handle and the attributes for the task (line 46).
-You can see in `turnOnTask_attributes` that the task name is `blindTask` and that the priority is already set to normal.  
+You can see in `blinkTask_attributes` that the task name is `blindTask` and that the priority is already set to normal.  
 
 Now you have to create a function named `blinkTask` as follow :  
 
@@ -68,7 +68,7 @@ The user button will create an interrupt and release a semaphore to deblock the 
 
 Prerequisite : Exercices on SPI
 
-For this exercise you will take back the interface u have code for the SPI sensor.
+For this exercise you will take back the interface you have code for the SPI sensor.
 In this interface you will add a new function `getFilteredTemp()`.
 The idea is to create a task that read the temp value every 200ms and put the value in a table of 10 temperature type FIFO.
 And the `getFilteredTemp()` eliminate the smallest and greatest value and return the average of the 8 temperature left.  

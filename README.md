@@ -6,6 +6,8 @@ This training has been created for anyone, even if you didn't do embedded develo
 You can do the exercises following their number so the difficulty increase exercise by exercise.
 But you can also select an exercise depend on the subject you want to train.
 
+Note that this training has been prepared to be done with a STM32F401RE board and not for an other board.
+
 ## Exercises folder
 
 Contains all the exercises of this training.

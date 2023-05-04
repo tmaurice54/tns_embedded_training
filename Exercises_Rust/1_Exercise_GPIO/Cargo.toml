@@ -1,0 +1,15 @@
+[package]
+name = "Exercise_GPIO"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cortex-m = "^0.7"        # Access to generic ARM peripherals
+cortex-m-rt = "^0.7"     # Startup code for the ARM Core
+embedded-hal = "^0.2"    # Access to generic embedded functions
+panic-halt = "^0.2.0"    # Panic handler
+
+# Access to the STM32F401 HAL.
+[dependencies.stm32f4xx-hal]
+features = ["rt", "stm32f401"]
+version = "^0.15"
