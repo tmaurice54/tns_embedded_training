@@ -1,4 +1,4 @@
-# Flash and debug the board
+# Flash and debug the board with Ozone
 
 During this training you will need to flash programms on the board and (maybe) debug your code.
 To achieve that we will use the software Ozone and a j-link.
@@ -45,34 +45,3 @@ You can press the button `Download and reset programm` on the top-left
 
 The programm is now flashed on the board.  
 You have access to all the tools of Ozone to debug such as the memory or the console.  
-
-## Print on serial terminal using UART
-
-An other solution to get log from the STM32 board is to use the UART communication and a serial port.  
-
-In the main files given in this training you will find initialization for the UART2. This allows you to use it as a debug tool (or just to print data if you want to).  
-
-You can use the following code :  
-
-```cpp
-#include <stdio.h>
-/*
-CODE
-*/
-#ifdef __GNUC__
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif
-
-PUTCHAR_PROTOTYPE {
-  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
-  return ch;
-}
-/*
-CODE
-*/
-printf("%s\r\n", bufferToWrite);
-```
-
-This code will rewrite the `fputc()` function wich is used by the `printf()` function. Now your prints are redirect to the UART2. You can then use a serial terminal such as putty and read the data print.

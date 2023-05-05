@@ -16,6 +16,6 @@ SECTIONS
   .signature :
   {
   	. = ALIGN(4);
-  	LONG(0xDEADBEEF);
+  	LONG(0x2E2E2E2E);
   } >SIGN
 }

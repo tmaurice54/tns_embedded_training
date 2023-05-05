@@ -49,11 +49,14 @@ To flash your programm with `cargo-flash` :
 
 `cargo flash --chip STM32F401RETx --release`
 
-Or using `cargo-embed` : 
+Or using `cargo-embed` :
 
 `cargo embed --target thumbv7em-none-eabihf`
 
-You may to change the parameter for `--chip` or `--target` depend of the board you are using.
+To flash an example (files in examples directory) :
 
-Note that all the config files in the exercises directories are wrote to work with the STM32F401RE board.
+`cargo flash --chip STM32F401RETx --example fileName`
+
+You may to change the parameter for `--chip` or `--target` depend of the board you are using.
+But note that all the config files in the exercises directories are wrote to work with the STM32F401RE board.
 You may need to change some parameters if you need to work with an another board.

@@ -58,3 +58,5 @@ When working with a real temperature sensor, the values we get can be noisy.
 So the idea is to read the temperature often and then work with a filtered value from those data.  
 For this exercise create a function in your interface named getFilteredTemp() and a function named getUnfilteredTemp() (similar as the readTemp() function).  
 The first function will return the temperature after being filtered and the second will return the raw temperature.  
+
+## Question 4 : Get data from I2C [Renode]

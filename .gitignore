@@ -9,5 +9,5 @@ Exercises/4_Exercise_LinkerScript/build
 RobotFrameworkTests/TEST/
 
 Exercises_Rust/1_Exercise_GPIO/target
-Exercises_Rust/2_Exercise_UART/target
+Exercises_Rust/2_Exercise_Sensor/target
 Exercises_Rust/3_Exercise_LinkerScript/target

@@ -2,7 +2,7 @@
 #![no_main]
 #![no_std]
 
-use core::cell::{Cell, RefCell};
+use core::cell::{RefCell};
 use cortex_m::interrupt::Mutex;
 // Panic handler
 use panic_halt as _;
@@ -30,13 +30,13 @@ fn main() -> ! {
 
     // Get access to device and core peripherals
     let mut device = pac::Peripherals::take().unwrap();
-    let core: cortex_m::Peripherals = cortex_m::Peripherals::take().unwrap();
+    let _core: cortex_m::Peripherals = cortex_m::Peripherals::take().unwrap();
 
     // Get access to RCC 
     let rcc = device.RCC.constrain();
     // Set the sysclock and freeze it
-    let clocks = rcc.cfgr.use_hse(8.MHz()).freeze();
-    // ????
+    let _clocks = rcc.cfgr.use_hse(8.MHz()).freeze();
+    // Constrains SYSCFG
     let mut syscfg = device.SYSCFG.constrain();
 
     // Get access to GPIOA and GPIOB
@@ -49,7 +49,7 @@ fn main() -> ! {
     
     // Allow the interrupt on button
     button.make_interrupt_source(&mut syscfg);    
-    button.trigger_on_edge(&mut device.EXTI, Edge::Rising);
+    button.trigger_on_edge(&mut device.EXTI, Edge::RisingFalling);
     button.enable_interrupt(&mut device.EXTI);
 
     // Enable the external interrupt
@@ -61,6 +61,7 @@ fn main() -> ! {
     cortex_m::interrupt::free(|cs| {
         G_BUTTON.borrow(cs).replace(Some(button));
     });
+    // Move led to global contex
     cortex_m::interrupt::free(|cs| {
         G_LED.borrow(cs).replace(Some(led));
     });

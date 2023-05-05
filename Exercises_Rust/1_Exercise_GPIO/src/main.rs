@@ -11,7 +11,8 @@ use cortex_m_rt::entry;
 // HAL library for stm32f4xx board
 use stm32f4xx_hal::{
     pac,
-    prelude::*
+    prelude::*,
+    timer::Channel
 };
 
 // Programm entry
@@ -24,6 +25,7 @@ fn main() -> ! {
 
     // Get access to RCC 
     let rcc = device.RCC.constrain();
+
     // Set the sysclock and freeze it
     let clocks = rcc.cfgr.sysclk(84.MHz()).freeze();
     
