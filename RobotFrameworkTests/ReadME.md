@@ -7,7 +7,7 @@ Refer to the documents in the Docs folder for the installation of Renode and Rob
 After the set up is done, open a terminal and go in the folder of the exercise yo want to test, for example 1_Tests_GPIO for the exercise 1.
 Execute the command :
 
-```
+```shell
 renode-test ./QuestionYouWantToTest.robot
 ```
 

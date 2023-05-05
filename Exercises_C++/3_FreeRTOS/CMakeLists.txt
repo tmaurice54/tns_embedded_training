@@ -1,4 +1,4 @@
-set(EXECUTABLE Exercise_SPI.elf)
+set(EXECUTABLE Exercise_FreeRTOS.elf)
 
 set(GENERATED_FILES 
     Core/Src/main.cpp
@@ -7,12 +7,13 @@ set(GENERATED_FILES
     Core/StmFiles/stm32f4xx_hal_msp.c
     Core/StmFiles/stm32f4xx_it.c
     Core/StmFiles/system_stm32f4xx.c
+    Core/StmFiles/freertos.c
     Core/Startup/startup_stm32f401retx.s
 )
 
 add_executable(${EXECUTABLE} ${GENERATED_FILES})
 
-target_link_libraries(${EXECUTABLE} Drivers)
+target_link_libraries(${EXECUTABLE} Drivers Middlewares)
 
 target_compile_definitions(${EXECUTABLE} PRIVATE
     -DUSE_HAL_DRIVER
@@ -21,11 +22,13 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 
 target_include_directories(${EXECUTABLE} PUBLIC
     Core/Inc
-    ${PROJECT_SOURCE_DIR}/../Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${PROJECT_SOURCE_DIR}/../Drivers/CMSIS/Include
-    ${PROJECT_SOURCE_DIR}/../Drivers/STM32F4xx_HAL_Driver/Inc
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/STM32F4xx_HAL_Driver/Inc
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Middlewares/Third_Party/FreeRTOS/Source/include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
 )
-
 target_compile_options(${EXECUTABLE} PRIVATE
     -mcpu=cortex-m4
     -ffunction-sections
@@ -69,5 +72,5 @@ add_custom_command(TARGET ${EXECUTABLE}
                     PRE_BUILD
                     COMMAND clang-format
                     -i 
-                    ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.cpp
+                    ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.cpp 
                     ${CMAKE_CURRENT_LIST_DIR}/Core/Inc/main.h)

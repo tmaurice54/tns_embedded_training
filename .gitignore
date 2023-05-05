@@ -1,13 +1,16 @@
 .vscode
 .cache
+
 Exo_Base
-Exercises/1_Exercise_GPIO/build/
-Exercises/2_Exercise_Sensor/build/
-Exercises/3_Exercise_FreeRTOS/build/
-Exercises/4_Exercise_LinkerScript/build
+
+# 
+Exercises_C++/1_GPIO/build/
+Exercises_C++/2_Sensor/build/
+Exercises_C++/3_FreeRTOS/build/
+Exercises_C++/4_LinkerScript/build
 
 RobotFrameworkTests/TEST/
 
-Exercises_Rust/1_Exercise_GPIO/target
-Exercises_Rust/2_Exercise_Sensor/target
-Exercises_Rust/3_Exercise_LinkerScript/target
+Exercises_Rust/1_GPIO/target
+Exercises_Rust/2_Sensor/target
+Exercises_Rust/3_LinkerScript/target

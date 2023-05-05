@@ -1,7 +1,10 @@
-set(EXECUTABLE Exercise_LinkerScript.elf)
+set(EXECUTABLE Exercise_GPIO.elf)
 
 set(GENERATED_FILES 
     Core/Src/main.cpp
+    # Core/Example/Example1.cpp
+    # Core/Example/Example2.cpp
+    # Core/Example/Example3.cpp
     Core/StmFiles/syscalls.c
     Core/StmFiles/sysmem.c
     Core/StmFiles/stm32f4xx_hal_msp.c
@@ -21,9 +24,9 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 
 target_include_directories(${EXECUTABLE} PUBLIC
     Core/Inc
-    ${PROJECT_SOURCE_DIR}/../Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${PROJECT_SOURCE_DIR}/../Drivers/CMSIS/Include
-    ${PROJECT_SOURCE_DIR}/../Drivers/STM32F4xx_HAL_Driver/Inc
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/STM32F4xx_HAL_Driver/Inc
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
@@ -71,10 +74,3 @@ add_custom_command(TARGET ${EXECUTABLE}
                     -i 
                     ${CMAKE_CURRENT_LIST_DIR}/Core/Src/main.cpp
                     ${CMAKE_CURRENT_LIST_DIR}/Core/Inc/main.h)
-
-
-
-# Add signature 
-# add_custom_command(TARGET ${EXECUTABLE}
-#                    POST_BUILD
-#                    COMMAND arm-none-eabi-objcopy --update-section .signature_section=${CMAKE_CURRENT_LIST_DIR}/signatureFile ${EXECUTABLE} Exercise_LinkerScript_Signed.elf)

@@ -9,7 +9,7 @@ Resource                      ${RENODEKEYWORDS}
 Create Machine
     Execute Command          mach create
     Execute Command          machine LoadPlatformDescription @${CURDIR}/../../RenodeConfig/board.repl
-    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises/2_Exercise_Sensor/build/2_Exercise_Sensor/Exercise_SPI.elf
+    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises_C++/2_Sensor/build/2_Sensor/Exercise_Sensor.elf
 
 *** Test Cases ***
 Button Led Should Be On

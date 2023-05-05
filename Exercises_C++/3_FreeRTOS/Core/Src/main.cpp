@@ -126,7 +126,7 @@ int main(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   blinkTaskHandle =
-      osThreadNew(blinkTask, NULL, &blinkTask_attributes);
+    osThreadNew(blinkTask, NULL, &blinkTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

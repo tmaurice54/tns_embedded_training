@@ -9,7 +9,7 @@ Resource                      ${RENODEKEYWORDS}
 Create Machine
     Execute Command          mach create
     Execute Command          machine LoadPlatformDescription @${CURDIR}/../../RenodeConfig/board.repl
-    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises/4_Exercise_LinkerScript/build/4_Exercise_LinkerScript/Exercise_LinkerScript.elf
+    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises_C++/4_LinkerScript/build/4_LinkerScript/Exercise_LinkerScript.elf
 
 *** Test Cases ***
 Signature Should Be Changed

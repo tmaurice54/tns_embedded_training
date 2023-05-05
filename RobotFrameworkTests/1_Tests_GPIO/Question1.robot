@@ -9,7 +9,7 @@ Resource                      ${RENODEKEYWORDS}
 Create Machine
     Execute Command          mach create
     Execute Command          machine LoadPlatformDescription @${CURDIR}/../../RenodeConfig/board.repl
-    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises/1_Exercise_GPIO/build/1_Exercise_GPIO/Exercise_GPIO.elf
+    Execute Command          sysbus LoadELF @${CURDIR}/../../Exercises_C++/1_GPIO/build/1_GPIO/Exercise_GPIO.elf
 
 *** Test Cases ***
 Button Led Should Be On

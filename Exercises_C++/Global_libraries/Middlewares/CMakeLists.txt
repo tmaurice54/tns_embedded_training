@@ -16,10 +16,10 @@ set(MIDDLEWARES_FILES
 add_library(${MODULE_NAME} ${MIDDLEWARES_FILES})
 
 target_include_directories(${MODULE_NAME} PUBLIC
-    ${PROJECT_SOURCE_DIR}/3_Exercise_FreeRTOS/Core/Inc
-    ${PROJECT_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${PROJECT_SOURCE_DIR}/Drivers/CMSIS/Include
-    ${PROJECT_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Inc
+    ${PROJECT_SOURCE_DIR}/3_FreeRTOS/Core/Inc
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/CMSIS/Include
+    ${PROJECT_SOURCE_DIR}/Global_libraries/Drivers/STM32F4xx_HAL_Driver/Inc
     Third_Party/FreeRTOS/Source/include
     Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
     Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
