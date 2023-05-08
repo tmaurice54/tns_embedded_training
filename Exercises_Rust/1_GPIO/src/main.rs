@@ -2,17 +2,19 @@
 #![no_main]
 #![no_std]
 
+use core::cell::RefCell;
+use cortex_m::interrupt::Mutex;
+
 // Panic handler
 use panic_halt as _;
 
-// Use to define the entry of the programm
 use cortex_m_rt::entry;
 
 // HAL library for stm32f4xx board
 use stm32f4xx_hal::{
-    pac,
+    pac::{self, interrupt},
+    gpio::{self, Edge, Input, Output},
     prelude::*,
-    timer::Channel
 };
 
 // Programm entry

@@ -2,7 +2,7 @@
 #![no_main]
 #![no_std]
 
-use core::cell::{RefCell};
+use core::cell::RefCell;
 use cortex_m::interrupt::Mutex;
 // Panic handler
 use panic_halt as _;
@@ -16,10 +16,10 @@ use stm32f4xx_hal::{
     prelude::*,
 };
 
+// Types for button and led
 type ButtonPin = gpio::PC13<Input>;
 type LedPin = gpio::PA5<Output>;
 
-// Mutex to safely shared among threads, RefCell to obtain a mutable reference, Option to allow lazy initialisation
 // Wrap the ButtonPin
 static G_BUTTON: Mutex<RefCell<Option<ButtonPin>>> = Mutex::new(RefCell::new(None));
 // Wrap the Led pin
@@ -47,7 +47,7 @@ fn main() -> ! {
     let led = gpioa.pa5.into_push_pull_output();
     let mut button = gpioc.pc13;
     
-    // Allow the interrupt on button
+    // Create and allow interrupt on button
     button.make_interrupt_source(&mut syscfg);    
     button.trigger_on_edge(&mut device.EXTI, Edge::RisingFalling);
     button.enable_interrupt(&mut device.EXTI);
@@ -57,12 +57,9 @@ fn main() -> ! {
         cortex_m::peripheral::NVIC::unmask(pac::Interrupt::EXTI15_10);
     }
 
-    // Move button to global contex 
+    // Move button and led to global contex 
     cortex_m::interrupt::free(|cs| {
         G_BUTTON.borrow(cs).replace(Some(button));
-    });
-    // Move led to global contex
-    cortex_m::interrupt::free(|cs| {
         G_LED.borrow(cs).replace(Some(led));
     });
 

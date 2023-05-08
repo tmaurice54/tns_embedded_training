@@ -72,11 +72,11 @@ fn main() -> ! {
         cs.set_low();
         match spi.transfer(&mut words){
             Ok(sk) => { 
-                let mut number = ((sk[0] as u16) << 8) | sk[1] as u16;
+                let mut number = ((sk[0] as i16) << 8) | sk[1] as i16;
                 if number > 0x7000 {
                     number = number & 0x7FFF;
                 }
-                let temp = ((number>>3)as f32*0.0625) as i16;
+                let temp = (((number>>3)as f32)*0.0625) as i32;
                 writeln!(tx, "{}\r", temp).unwrap();
                 if temp == 50 {
                     led.set_high();
