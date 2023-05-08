@@ -36,7 +36,42 @@ fn main() -> ! {
     // Set the led pin
     let mut led = gpioa.pa5.into_push_pull_output();
 
-    loop {
+    // Set SPI2
+    let mut spi = Spi::new(
+        device.SPI2, 
+        (sclk, miso, NoMosi{}), 
+        Mode {
+            polarity: Polarity::IdleLow,
+            phase: Phase::CaptureOnFirstTransition,
+        }, 
+        2.MHz(), 
+        &clocks);
 
+    // Set delay
+    let mut delay = core.SYST.delay(&clocks);
+
+    let mut words = [0x00,0x00];
+
+    loop {
+        cs.set_low();
+        match spi.transfer(&mut words){
+            Ok(sk) => { 
+                let mut number = ((sk[0] as i16) << 8) | sk[1] as i16;
+                if number > 0x7000 {
+                    number = number & 0x7FFF;
+                }
+                let temp = (((number>>3)as f32)*0.0625) as i32;
+                if temp == 50 {
+                    led.set_high();
+                } else {
+                    led.set_low();
+                }
+            },
+            Err(_e) => {
+                
+            },
+        }
+        cs.set_high();
+        delay.delay_ms(1000u16);
     }
 }
