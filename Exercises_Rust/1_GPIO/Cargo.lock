@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "Exercise_GPIO"
+name = "GPIO"
 version = "0.1.0"
 dependencies = [
  "cortex-m",

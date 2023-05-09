@@ -8,11 +8,21 @@ But you can also select an exercise depend on the subject you want to train.
 
 Note that this training has been prepared to be done with a STM32F401RE board and not for an other board.
 
-## Exercises folder
+## Exercises C++ folder
 
-Contains all the exercises of this training.
+Contains all the main exercises of this training.
 Each exercise is made to learn one or multiple specific subject on embedded development.
 The difficulty increases exercise by exercise but also question by question trhough the same exercise.
+
+Note that the majority part of the support code used for those exercises were created with STM32CubeIDE.
+If you want to create your own projects I recommend you to install this IDE.
+It will help you to create every files you need (such as drivers, linkerScript ...).
+You can also check all the cmake file in this training to look at the compilation options and parameters.
+
+## Exercises Rust folder
+
+This folder contains some exercises similar to the C++ exercises but for Rust project.
+Those exercises are an initiation to the rust enbedded projects.
 
 ## Doc folder
 

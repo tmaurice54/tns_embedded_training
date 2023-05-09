@@ -39,7 +39,7 @@ fn main() -> ! {
     // Constrains SYSCFG
     let mut syscfg = device.SYSCFG.constrain();
 
-    // Get access to GPIOA and GPIOB
+    // Get access to GPIOA and GPIOC
     let gpioa = device.GPIOA.split();
     let gpioc = device.GPIOC.split();
 

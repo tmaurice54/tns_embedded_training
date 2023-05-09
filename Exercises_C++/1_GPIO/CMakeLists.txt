@@ -2,9 +2,9 @@ set(EXECUTABLE Exercise_GPIO.elf)
 
 set(GENERATED_FILES 
     Core/Src/main.cpp
-    # Core/Example/Example1.cpp
-    # Core/Example/Example2.cpp
-    # Core/Example/Example3.cpp
+    # Core/Example/example_interrupt.cpp
+    # Core/Example/example_pwm.cpp
+    # Core/Example/example_simple_button.cpp
     Core/StmFiles/syscalls.c
     Core/StmFiles/sysmem.c
     Core/StmFiles/stm32f4xx_hal_msp.c

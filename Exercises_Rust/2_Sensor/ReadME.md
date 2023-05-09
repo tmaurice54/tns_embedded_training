@@ -48,4 +48,6 @@ Also the LM74 sensor send data that you have to process to get the temperature v
 
 Now you have understand how to read values from SPI Sensor.
 But this kind of code isn't practical and developper usually create an interface to simplify their code and the futur utilisation of the sensor.  
-Create an interface for this sensor wich will contain a function readTemp() to read the temperature and use it in your main function.
+Create an interface for this sensor wich will contain a function get_temp() to read the temperature and use it in your main function.
+
+A possibilitie is to create a `struct` and then use `impl` to implemente function for this struct.

@@ -68,8 +68,7 @@ static void MX_SPI2_Init(void);
  */
 int main(void) {
   /* USER CODE BEGIN 1 */
-    uint8_t data[2];
-    int16_t temp;
+  uint8_t data[2];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
