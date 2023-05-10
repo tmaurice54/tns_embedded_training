@@ -7,6 +7,7 @@ edition = "2021"
 cortex-m = "^0.7"        # Access to generic ARM peripherals
 cortex-m-rt = "^0.7"     # Startup code for the ARM Core
 embedded-hal = "^0.2"    # Access to generic embedded functions
+embedded-storage = "^0.2.0"
 panic-halt = "^0.2.0"    # Panic handler
 
 # Access to the STM32F401 HAL.
