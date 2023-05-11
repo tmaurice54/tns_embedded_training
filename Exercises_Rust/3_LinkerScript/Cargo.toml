@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 cortex-m = "^0.7"        # Access to generic ARM peripherals
 cortex-m-rt = "^0.7"     # Startup code for the ARM Core
+defmt = "0.3.4"
+defmt-rtt = "0.4.0"
 embedded-hal = "^0.2"    # Access to generic embedded functions
 embedded-storage = "^0.2.0"
 panic-halt = "^0.2.0"    # Panic handler

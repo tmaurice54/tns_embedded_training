@@ -10,7 +10,7 @@ The master is connected to his slaves with 4 ports :
 
 - CLK to share the clock with the slaves
 - MISO (Master Input, Slave Output) to send data to the slaves
-- MOSi (Master Ouput, Slave Input) to receive data from the slaves
+- MOSI (Master Ouput, Slave Input) to receive data from the slaves
 - SS (Slave Select) used to select the slave the master want to communicate with
 
 CLK, MOSI and MISO are the same pin on the master for all the slaves.

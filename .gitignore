@@ -1,16 +1,12 @@
 .vscode
 .cache
 
-Exo_Base
-
-# 
-Exercises_C++/1_GPIO/build/
-Exercises_C++/2_Sensor/build/
-Exercises_C++/3_FreeRTOS/build/
-Exercises_C++/4_LinkerScript/build
-
+# Folder use to tests with robotFramework
 RobotFrameworkTests/TEST/
 
-Exercises_Rust/1_GPIO/target
-Exercises_Rust/2_Sensor/target
-Exercises_Rust/3_LinkerScript/target
+# build and targte folders
+target
+build
+
+# lock files
+*.lock
