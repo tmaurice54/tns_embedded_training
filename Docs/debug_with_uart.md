@@ -1,13 +1,13 @@
 # Debug using UART
 
 The UART protocol can be used to print data to the PC trough the STLink.
-We just have to use the UART2 on the board STM32F401RE.
+We just must use the UART2 on the board STM32F401RE.
 
 ## Print on serial terminal with UART (C++ version)
 
 In the main files given in this training you will find initialization for the UART2. This allows you to use it as a debug tool (or just to print data if you want to).  
 
-You can use the following code :  
+You can use the following code:  
 
 ```cpp
 #include <stdio.h>
@@ -30,7 +30,9 @@ CODE
 printf("%s\r\n", bufferToWrite);
 ```
 
-This code will rewrite the `fputc()` function wich is used by the `printf()` function. Now your prints are redirect to the UART2. You can then use a serial terminal such as putty and read the data print.
+This code will rewrite the `fputc()` function wich is used by the `printf()` function.
+Now your prints are redirect to the UART2.
+You can then use a serial terminal such as putty and read the data printed.
 
 ## Print on serial terminal with UART (Rust version)
 

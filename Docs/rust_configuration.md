@@ -8,7 +8,7 @@ And if you are on Linux (or subsystem like wsl) you will have to excute a single
 
 ## Install toolchain for the exercises
 
-First make sure you have the newest version of rust :
+First make sure you have the newest version of rust:
 
 `rustup update`
 
@@ -31,7 +31,7 @@ And finally, for Cortex-M4F and M7F with hardware floating point (ARMv7E-M archi
 
 `rustup target add thumbv7em-none-eabihf`
 
-Then you can install all the modules used to code and flash embedded programms :
+Then you can install all the modules used to code and flash embedded programs:
 
 `cargo install cargo-binutils cargo-embed cargo-flash cargo-expand`
 
@@ -39,24 +39,24 @@ Then you can install all the modules used to code and flash embedded programms :
 
 ## Compile and flash
 
-First open a terminale (Linux  or Windows) and go in your project directory.
+First open a terminal (Linux or Windows) and go in your project directory.
 
-To compile your project and create a binary in release mode :
+To compile your project and create a binary in release mode:
 
 `cargo build --release`
 
-To flash your programm with `cargo-flash` :
+To flash your program with `cargo-flash`:
 
 `cargo flash --chip STM32F401RETx --release`
 
-Or using `cargo-embed` :
+Or using `cargo-embed`:
 
 `cargo embed --target thumbv7em-none-eabihf`
 
-To flash an example (files in examples directory) :
+To flash an example (files in examples directory):
 
 `cargo flash --chip STM32F401RETx --example fileName`
 
-You may to change the parameter for `--chip` or `--target` depend of the board you are using.
-But note that all the config files in the exercises directories are wrote to work with the STM32F401RE board.
-You may need to change some parameters if you need to work with an another board.
+You may need to change the parameter for `--chip` or `--target` depend on the board you are using.
+But note that all the config files in the exercise’s directories are wrote to work with the STM32F401RE board.
+You may need to change some parameters, configurations, or dependencies if you need to work with another board.
