@@ -30,4 +30,10 @@ Now that you have find the signature, try to modify it in memory.x.
 You have to find the section and modify the content.  
 Then you can compile and use the debugger again to see that the signature is now modified.
 
-You can also change the signature and use the RobotFramework test to test if the changes operate.  
+## Question 3: Change the signature 2 [Renode and Real board]
+
+The way to change the signature just before works but is not interesting.  
+The linker script should be used just to allocate memory and give the starting address for the signature but not to write it.  
+To sign your executable, you will use the command `arm-none-eabi-objcopy`.  
+Create a new file and write in it the signature you want to write.  
+Then, use the command to append the signature inside the .elf file.  

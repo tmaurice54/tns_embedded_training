@@ -131,7 +131,7 @@ To achieve that you will need the following code:
     let mut pin_pwm = device.TIMX.pwm_hz(pin, 2000.Hz(), &clocks);
     
     // Get max duty
-    let mut max_duty = 65535;
+    let mut max_duty = led_pwm.get_max_duty();
 
     // Enable the pwm on channel C1
     pin_pwm.enable(Channel::CX);

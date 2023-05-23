@@ -150,7 +150,7 @@ int main(void) {
   /* USER CODE BEGIN RTOS_THREADS */
   interruptTaskHandle =
       osThreadNew(InterruptTask, NULL, &interruptTask_attributes);
-  counterTaskHandle = osThreadNew(InterruptTask, NULL, &counterTask_attributes);
+  counterTaskHandle = osThreadNew(CountTask, NULL, &counterTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
