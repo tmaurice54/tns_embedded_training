@@ -2,6 +2,11 @@
 
 In this exercise we will use the RTIC (Real-Time Interrupt-driven Concurrency) framework.
 This is a concurrency framework for building real-time systems.
+But the difference with an usual RTOS system is that RTIC used the NVIC in Cortex-M MCUs to perform scheduling.
+When creating tasks, we have to indicates on which interrupt it will be triggered.
+
+All you need to know for this exercise is in the RTIC documentation and in the previous exercises.
+But if you struggle to find the solution you can look at the `examples` directory which contains examples of solutions for the different questions.
 
 Useful links:  
 [RTIC Book](https://rtic.rs/1/book/en/)  
@@ -9,8 +14,9 @@ Useful links:
 
 ## Question 1 : Create an interrupt on button
 
-Create a task that starts on butoon interrupt.
-Each time you press the button, the led is toggle.
+By looking at the documentation and with the template of RTIC programm given (main.rs),
+create a task that will toggle the led when you press the button.
+The initialization of the device/led/button will be similary the same than for the interrupt question in the GPIO exercise.
 
 ## Question 2 : Create an interrupt on Timer
 
