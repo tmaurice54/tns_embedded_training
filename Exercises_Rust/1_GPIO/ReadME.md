@@ -1,6 +1,6 @@
 # Exercise on GPIO
 
-This first exercise introduces the usage of GPIOs using Rust language.
+This first exercise introduces the usage of GPIOs using the Rust language.
 You will control a led and a button.
 In this exercise you will be using the STM32 HAL library which provides basic APIs to facilitate the utilization of your STM32 board.
 
@@ -56,7 +56,7 @@ You may need the functions `is_high()` and/or `is_low()`;
 
 ## Question 4: Use button with interruption mode [Renode and Real Board]
 
-Create a code that will turn on the led when we press the button and turn off the led when we release it.
+Write code that will turn on the led when we press the button and turn off the led when we release it.
 
 To create an interrupt with a button and a led we must create static global variable called G_BUTTON and G_LED as follows:  
 
@@ -91,7 +91,7 @@ Here we want an interrupt on rising and falling edge:
     }
 ```
 
-We have also to move the led and the button to global context:  
+We also have to move the led and the button to global context:  
 
 ```rust
     // Move button and led to global contex 
@@ -144,6 +144,5 @@ Don't forget that the led is linked to the `TIM2`, and you can use the channel 1
 
 ## Question 6: led Dimmer [Real board]
 
-Now that you have understand what is PWM and how to use it.  
-Try to change continually the brightness of the led.  
+Now that you have understood what a PWM is and how to use it, try to change continually the brightness of the led.  
 You can create a loop which will slowly turn off the led and after slowly turn on the led.

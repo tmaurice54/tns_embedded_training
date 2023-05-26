@@ -1,6 +1,6 @@
 # Exercise the framework Embassy
 
-The framework Embassy use async/await to allows easy and efficient multitasking in embedded systems.
+The framework Embassy uses async/await to allows easy and efficient multitasking in embedded systems.
 This project also contains lot of differents batteries such as embassy-stm32 wich is a HAL for stm32 board, or such as embassy::time which provides Instant, Duration and Timer types.
 
 In this exercise we will use entirely use embassy to create tasks and control the user led and button.
