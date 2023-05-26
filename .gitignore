@@ -1,10 +1,10 @@
 .vscode
 .cache
 
-# Folder use to tests with robotFramework
+# Folder used to tests with robotFramework
 RobotFrameworkTests/TEST/
 
-# build and targte folders
+# build and target folders
 target
 build
 

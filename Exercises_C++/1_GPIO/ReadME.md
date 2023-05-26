@@ -6,24 +6,24 @@ In this exercise you will be using the STM32 HAL library which provides basic AP
 
 Useful information:
 
-The board STM32F401RE come with a User Led (named led 2) connected to the STM32 I/O PA5, which means Port A Pin 5.
-It also come with a user button connected to the STM32 I/O PC13, which means Port B pin 13.
+The board STM32F401RE comes with a User LED (named LD2) connected to the STM32 I/O PA5, which means Port A Pin 5.
+It also comes with a user button connected to the STM32 I/O PC13, which means Port C pin 13.
 
 Timer2 Channel1 is linked to the user LED.
 
 Useful links:  
 [HAL Library](https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf) (Section 31.2 for GPIO)  
-[Information about pin](https://os.mbed.com/platforms/ST-Nucleo-F401RE/)  
+[Information about pins](https://os.mbed.com/platforms/ST-Nucleo-F401RE/)  
 [Information about PWM and Timer on STM32](https://deepbluembedded.com/stm32-pwm-example-timer-pwm-mode-tutorial/)  
 
 ## Question 1: Turn on the User LED [Renode and Real Board]
 
-The goal of this question is to create a code that will turn on the User LED.  
-To achieve that you will create a function in the main file that will turn on the User LED and then call this function in the main function, in the infinite loop.
+The goal of this question is to write code that will turn on the User LED.  
+To achieve that you will create a function in the main.cpp file that will turn on the User LED and then call this function in the main's infinite loop.
 
 ## Question 2: Blink the User LED [Renode and Real Board]
 
-Create a function in the main file that will Toggle the User LED.  
+Create a function in the main file that will toggle the User LED.  
 Then call this function every second in the main function, in the infinite loop.
 
 ## Question 3: Use button to turn on the LED [Renode and Real Board]
@@ -36,7 +36,7 @@ Then call this function in the main function.
 
 ## Question 4: Use button with interruption mode [Renode and Real Board]
 
-Same goal than for the previous question but now when the button is pressed it will create an interruption, so we don't need to permanently check if the button is pressed on the infinite loop.
+Same goal as for the previous question but now when the button is pressed it will create an interruption, so we don't need to permanently check if the button is pressed on the infinite loop.
 
 As the button is pressed, the voltage of the pin will go to zero, so we need to detect a falling edge on the value of the voltage.
 But we also need to know when the button is released to turn off the LEDs (rising edge).
@@ -70,17 +70,16 @@ However, PWM consist of two main components: the Duty cycle and the Frequency.
 Duty cycle describes the amount of time, the signal is in HIGH state as a percentage of total time, it takes to complete one cycle.  
 Frequency describes how fast the PWM completes a cycle and therefore how fast it switches between HIGH and LOW.  
 
-You can find in the main file, in the `MX_TIM2_Init` function, that the Timer2 is already initiate with good values (You will have to call this function in the main function).
+You can find in the main file, in the `MX_TIM2_Init` function, that the Timer2 is already initiated with the appropriate values (You will have to call `MX_TIM2_Init` from the main function).
 The prescaler of 72 will set the time clock of the timer to 1MHz as the original clock is 72MHz.  
-And the period of 100 will set the frequency of to 10kHz.  
+And the period of 100 will set the timer's frequency to 10kHz.  
 Now you can change the value of the TIM2->CRR1 register which will change the duty cycle.  
 The value of this register must be between 0 and the period (100 here).  
-For example, a value of 30 will make the duty cycle to 30%.  
+For example, a value of 30 will make the duty cycle 30%.  
 
 Now create a function that will change the Brightness of the user LED.  
 
 ## Question 6: LED Dimmer [Real board]
 
-Now that you have understand what PWM is and how to use it.  
-Try to change continually the brightness of the LED.  
+Now that you have understood what a PWM is and how to use it, try to change continually the brightness of the LED.  
 You can create a loop which will slowly turn off the LED and after slowly turn on the LED.

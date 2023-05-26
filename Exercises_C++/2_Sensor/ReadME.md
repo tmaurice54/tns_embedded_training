@@ -1,6 +1,6 @@
 # Exercise on sensor
 
-In this exercise you will discover how to use SPI sensor with STM32 board.  
+In this exercise you will discover how to use a SPI sensor with STM32 board.  
 For this exercise you will need renode because we don't have access to a SPI sensor.  
 But the board we can simulate on renode has the temperature sensor TI LM74 connected on the SPI2.
 
@@ -41,13 +41,13 @@ Our objective is to read the temperature of a sensor connected via SPI.
 After looking at the documentation about the LM74 sensor and on how to use SPI with STM32 board,
 create a function that will read the temperature and put the value in a buffer.  
 Don't forget to change the value of SS to 0 send/receive data, and after the communication is done to change again the value to 1.  
-Also, the LM74 sensor send data that you have to process to get the temperature value. (Look at the datasheet)  
+The LM74 sensor sends data that you have to process to get the temperature value. (Look at the datasheet)  
 
-To test your code with the Robot Framework test, turn on the user LED if the value of the Temperature is 50, and let the LED off in the other cases.
+To test your code with the Robot Framework test, turn on the user LED if the value of the Temperature is 50, and turn the LED off otherwise.
 
 ## Question 2: Interface for the sensor [Renode]
 
 Now you have understood how to read values from SPI Sensor.
-But this kind of code isn't practical, and developer usually create an interface to simplify their code and the future utilisation of the sensor.  
-In a new file create an interface for this sensor which will contain a function readTemp() to read the temperature.
+But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.
+In a new file, create an interface for this sensor which will contain a function readTemp() to read the temperature.
 After that you will create an instance in your main file and try to read the temperature value.  

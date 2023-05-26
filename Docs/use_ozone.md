@@ -2,7 +2,7 @@
 
 During this training you will need to flash programs on the board and (maybe) debug your code.
 To achieve that we will use the software Ozone and a j-link.
-Ozone is a free Software that allow the user to flash code and read the memory while the code is running.
+Ozone is a free Software that allows the user to flash code and read the memory while the code is running.
 It is a useful tool to work with.  
 
 ## Connection with the j-link

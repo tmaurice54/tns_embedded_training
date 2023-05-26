@@ -1,9 +1,9 @@
 # Exercise : Add C code in Rust programm
 
 Many projects won't integrate Rust from scratch but will adopt gradually the language.
-So it is important to learn how to add C/Rust code in Rust/C programm.
+So it is important to learn how to add C/Rust code in a Rust/C programm.
 
-To achieve that we will use the Foreign Function Interface (FFI) provide by Rust.
+To achieve that we will use the Foreign Function Interface (FFI) provided by Rust.
 This interface is a way to call other languages in Rust and to call Rust in other languages.
 
 We will also use a tool named bindgen which generates Rust FFI bindings to C/C++ libraries.
@@ -24,14 +24,14 @@ make
 ```
 
 This will build the project and put all generated files in the `build` directory.
-You can see that the `main.c` file and `main` function are rename with `mainc`.
+You can see that the `main.c` file and `main` function have been renamed to `mainc`.
 This is because we can't have 2 `main` functions in the whole project, and we want to use the `main` from Rust.
 
 ## Question 2: Create a static libray from the build
 
 Now we have to generate a static library from the STM32 HAL C Project Output.
 We will name this library `libstm32.a`.
-The format as to be `.a` and the name must start with `lib` to be recognize.
+The format has to be `.a` and the name must start with `lib` to be recognized.
 For this we will use the `ar rcs` tool:
 
 ```sh
@@ -140,8 +140,8 @@ fn main() {
 ```
 
 This file will be automatically used during the build.
-`build.rs` essentially allow to automate custom build.
-In our case, we need to generate Rust FFi bindings for all the header we included in `wrapper.h`.
+`build.rs` essentially allows to automate custom builds.
+In our case, we need to generate Rust FFi bindings for all the headers we included in `wrapper.h`.
 
 ## Question 5: Integrate the needed functions
 
@@ -158,7 +158,7 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 And now you can use the STM32 HAL functions in your rust programm.
 Try to toggle the led and use the button.
 
-Here an example of a programm that blink the led every seconde:
+Here an example of a programm that blink the led every second:
 
 ```rust
 const GPIOA: *mut GPIO_TypeDef = GPIOA_BASE as *mut GPIO_TypeDef;

@@ -1,6 +1,6 @@
 # Exercise on sensor
 
-In this exercise you will discover how to use SPI sensor with STM32 board using rust language.
+In this exercise you will discover how to use a SPI sensor with STM32 board using the Rust language.
 For this exercise you will need renode because we don't have access to a SPI sensor.  
 But the board we can simulate on renode has the temperature sensor TI LM74 connected on the SPI2.
 
@@ -42,12 +42,12 @@ Our objective is to read the temperature of a sensor connected via SPI.
 After looking at the documentation about the LM74 sensor and on how to use SPI with STM32 board,
 create a function that will read the temperature and put the value in a buffer.  
 Don't forget to change the value of SS to 0 send/receive data, and after the communication is done to change again the value to 1.  
-Also, the LM74 sensor send data that you have to process to get the temperature value. (Look at the datasheet)  
+The LM74 sensor sends data that you have to process to get the temperature value. (Look at the datasheet)  
 
 ## Question 2: Interface for the sensor [Renode]
 
-Now you have understood how to read values from SPI Sensor.
-But this kind of code isn't practical, and developer usually create an interface to simplify their code and the future utilisation of the sensor.  
+Now you have understood how to read values from a SPI Sensor.
+But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.  
 Create an interface for this sensor which will contain a function get_temp() to read the temperature and use it in your main function.
 
 A possibility is to create a `struct` and then use `impl` to implement function for this struct.
