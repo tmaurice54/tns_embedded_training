@@ -18,11 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
+#include "semphr.h"
+#include "task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,24 +44,9 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
 
-/* Definitions for defaultTask */
-osThreadId_t interruptTaskHandle;
-const osThreadAttr_t interruptTask_attributes = {
-    .name = "interruptTask",
-    .stack_size = 128 * 4,
-    .priority = (osPriority_t)osPriorityAboveNormal1,
-};
-
-osThreadId_t counterTaskHandle;
-const osThreadAttr_t counterTask_attributes = {
-    .name = "counterTask",
-    .stack_size = 128 * 4,
-    .priority = (osPriority_t)osPriorityNormal,
-};
 
 /* Definitions for myBinarySem01 */
-osSemaphoreId_t myBinarySem01Handle;
-const osSemaphoreAttr_t myBinarySem01_attributes = {.name = "myBinarySem01"};
+SemaphoreHandle_t myBinaryHandle;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -124,16 +110,13 @@ int main(void) {
 
   /* USER CODE END 2 */
 
-  /* Init scheduler */
-  osKernelInitialize();
-
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
   /* Create the semaphores(s) */
   /* creation of myBinarySem01 */
-  myBinarySem01Handle = osSemaphoreNew(1, 0, &myBinarySem01_attributes);
+  myBinaryHandle = xSemaphoreCreateBinary();
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -148,9 +131,8 @@ int main(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* USER CODE BEGIN RTOS_THREADS */
-  interruptTaskHandle =
-      osThreadNew(InterruptTask, NULL, &interruptTask_attributes);
-  counterTaskHandle = osThreadNew(CountTask, NULL, &counterTask_attributes);
+  xTaskCreate(InterruptTask,"Interrupt task", 128, NULL, 1, NULL);
+  xTaskCreate(CountTask,"Count task", 128, NULL, 1, NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -158,7 +140,7 @@ int main(void) {
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
-  osKernelStart();
+  vTaskStartScheduler();
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -284,12 +266,12 @@ static void MX_GPIO_Init(void) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-  osSemaphoreRelease(myBinarySem01Handle);
+  xSemaphoreGiveFromISR(myBinaryHandle, pdFALSE);
 }
 
 void InterruptTask(void *argument) {
   for (;;) {
-    osSemaphoreAcquire(myBinarySem01Handle, osWaitForever);
+    xSemaphoreTake(myBinaryHandle, portMAX_DELAY);
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
   }
 }
@@ -299,7 +281,7 @@ void CountTask(void *argument) {
   for (;;) {
     printf("%d\r\n", count);
     count++;
-    osDelay(1000);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 

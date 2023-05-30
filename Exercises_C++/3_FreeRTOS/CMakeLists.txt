@@ -2,6 +2,7 @@ set(EXECUTABLE Exercise_FreeRTOS.elf)
 
 set(GENERATED_FILES 
     Core/Src/main.cpp
+    # Core/Example/example_simples_tasks.cpp
     Core/StmFiles/syscalls.c
     Core/StmFiles/sysmem.c
     Core/StmFiles/stm32f4xx_hal_msp.c

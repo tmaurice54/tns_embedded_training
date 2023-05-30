@@ -9,59 +9,61 @@ Event-driven systems switch between tasks based on their priorities, while time-
 So, a Real Time OS allows the user to create tasks that can be controlled with events/interruption/semaphores, or tasks that can work simultaneously if they have the same priority.  
 FreeRTOS is the leader in the RTOS area and is commonly used in industry.  
 
-But here we won't use directly FreeRTOS:  
-It’s important to understand how STM32CubeIDE has bundled FreeRTOS.
-While FreeRTOS is an underlying software framework that allows for switching tasks, scheduling, etc., we won’t be making calls to FreeRTOS directly.
-ARM has created the CMSIS-RTOS library, which allows us to make calls to an underlying RTOS, thus improving the portability of code among various ARM processors. (digikey.com)
+To use FreeRTOS in this exercise an include `#include "FreeRTOS.h"` is made in the file `main.h`.
+Also to create tasks and use semaphores the includes `#include "task.h"` and `#include "semphr.h"` are already made in the main file.
+If you want to use other functionalities of FreeRTOS you may need to include other headers.
 
 Useful links:  
-[FreeRTOS/CMSIS on STM32](https://www.digikey.com/en/maker/projects/getting-started-with-stm32-introduction-to-freertos/ad275395687e4d85935351e16ec575b1)  
+[FreeRTOS API Reference](https://www.freertos.org/a00106.html)
 [FreeRTOS Manual](https://www.freertos.org/Documentation/FreeRTOS_Reference_Manual_V9.0.0.pdf)  
-[CMSIS functions overview](https://www.keil.com/pack/doc/CMSIS/RTOS/html/functionOverview.html)  
-[Semaphore with CMSIS](https://www.keil.com/pack/doc/CMSIS/RTOS/html/group__CMSIS__RTOS__SemaphoreMgmt.html)
+[FreeRTOS Developer docs](https://www.freertos.org/features.html)
 
 ## Question 1: Create your first task [Renode and Real board]
 
-Your first question will be to create a task (called Thread in CMSIS but Task by FreeRTOS) that will blink the user LED.
-To achieve that the main file contains already the handle and the attributes for the task (line 46).
-You can see in `blinkTask_attributes` that the task name is `blinkTask` and that the priority is already set to normal.  
+Your first question will be to create a task that will blink the user LED.
 
-Now you must create a function named `blinkTask` as follow:  
+To achive that you must create a function named `blinkTask` as follow:  
 
 ```cpp
-void blinkTask()
+void blinkTask(void *pvParameters)
 {
     while(1)
     {
         //code to blink the LED
     }
+    vTaskDelete( NULL );
 }
 ```
 
 If needed you can pass arguments to the task, but here we don't need to.  
 After writing your task handler, you will need to create the task in the main function:
+
 ```cpp
-blinkTaskHandle = osThreadNew(blinkTask, NULL, &blinkTask_attributes);
+xTaskCreate(blinkTask,"Blink task", 128, NULL, 1, NULL);
 ```
 
-This task creation should be done before the function call `osKernelStart` which will give the control to the kernel and start the tasks.
+More information about the function [here](https://www.freertos.org/a00125.html)
+
+This task creation should be done before the function call `vTaskStartScheduler` which will give the control to the kernel and start the tasks.
 
 ## Question 2: Control tasks with semaphore [Renode and Real board]
 
 Now that you have understood how a task works, create 2 tasks to blink the LED.  
 One that will turn on the LED and on that will turn off the LED.
-To controls those tasks, you will need a semaphore. (With the function `osSemaphoreRelease` and `osSemaphoreAcquire`)
+To controls those tasks, you will need a semaphore. (With the function `xSemaphoreGive` and `xSemaphoreTake`)
 
-The handles and attributes are already created for the semaphore.
-You just need to create it in the main function with the `osSemaphoreNew()`  function.  
+The handle is already created for the semaphore.
+You just need to initiate it in the main function with the `xSemaphoreCreateBinary()`  function.  
 If you need information about what a semaphore is and how to use it, look at this link:
-[Semaphore with CMSIS](https://www.keil.com/pack/doc/CMSIS/RTOS/html/group__CMSIS__RTOS__SemaphoreMgmt.html)
+[Introduction to semaphore with FreeRTOS by digikey](https://www.digikey.com/en/maker/projects/introduction-to-rtos-solution-to-part-7-freertos-semaphore-example/51aa8660524c4daba38cba7c2f5baba7)
 
 ## Question 3 : Control tasks with interruption [Renode and Real board]
 
 Tasks can also be controlled with interruptions as we have seen in the GPIO exercise.  
 Create a function that will toggle the LED each time you press the user button.  
 The user button will create an interrupt and release a semaphore to unblock the task.
+
+Note that to realease a semaphore in an interruption callback you need the function : `xSemaphoreGiveFromISR(myBinaryHandle, pdFALSE)`
 
 ## Question 4: Filter value of a temperature sensor [Renode]
 

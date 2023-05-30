@@ -48,7 +48,7 @@ mod app {
 
         // Kick off the timer with 2 seconds timeout first
         // It probably would be better to use the global variable here but I did not to avoid the clutter of having to create a crtical section
-        timer.start(2000.millis()).unwrap();
+        timer.start(200.millis()).unwrap();
 
         // Set up to generate interrupt when timer expires
         timer.listen(Event::Update);
