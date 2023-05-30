@@ -12,23 +12,28 @@ It is not specialized about embedded project.
 
 ### GPIO
 
-This exercise is about how to use the GPIO using a STM32 board.
+[This exercise](./1_GPIO/) is about how to use the GPIO using a STM32 board.
 You will learn how to turn on/off leds, how to use button to trigger action, interruption on EXTI and PWM.
 
 ### Sensor
 
-This exercise is about SPI sensor.
+[This exercise](./2_Sensor/) is about SPI sensor.
 You will learn how to read the temperature from a temperature sensor.
-
-### FreeRTOS
-
-This exercise is about the RTOS FreeRTOS.
-You will learn how to create tasks and how to control them using interruptions and semaphores.
 
 ### Linker Script
 
-This exercise is about the linker scripts.
+[This exercise](./3_LinkerScript/) is about the linker scripts.
 You will learn how to find a signature, how to read it and how to modify it.
+
+### C in Rust
+
+[This exercise](./4_C_in_Rust/) is about adding C/C++ in Rust programms.
+You will learn how to create a lib from a C/C++ project and how to use it in a Rust project.
+
+### RTIC
+
+[This exercise](./5_RTIC/) is about the framework RTIC.
+You will learn hoy to create tasks controlled by interruption (EXTI, TIMER, ...).
 
 ## How to build, flash and debug
 
