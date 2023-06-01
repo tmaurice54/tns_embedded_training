@@ -46,6 +46,17 @@ start
 ```
 
 Now your board is running your program and you can look at/trigger your peripherals by the sysbus.
+For example to check the led's state:
+
+```sh
+sysbus.gpioPortA.LD2 State
+```
+
+Or to press the user button :
+
+```sh
+sysbus.gpioPortC.UserButton Press
+```
 
 More information here:
 [Renode Documentation](https://renode.readthedocs.io/)

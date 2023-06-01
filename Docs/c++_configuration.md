@@ -31,6 +31,13 @@ echo 'export PATH=$PATH:<FOLDER_PATH_HERE>/bin' >> ~/.bashrc
 arm-none-eabi-gcc --version
 ```
 
+### Package need for check and code formatage
+
+```bash
+sudo apt-get install cppcheck
+sudo apt-get install clang-format
+```
+
 ## Building the exercise
 
 Prerequisites: (sudo apt install)
