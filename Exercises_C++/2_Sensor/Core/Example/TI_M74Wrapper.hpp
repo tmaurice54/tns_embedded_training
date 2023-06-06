@@ -6,16 +6,16 @@
 class TI_M74Wrapper
 {
 private:
-    SPI_HandleTypeDef hspi;
+    SPI_HandleTypeDef* hspi;
 public:
-    TI_M74Wrapper(SPI_HandleTypeDef hspi);
+    TI_M74Wrapper(SPI_HandleTypeDef* hspi);
     void init();
     float readTemp();
     void writeData(uint8_t address, uint8_t value);
     ~TI_M74Wrapper();
 };
 
-TI_M74Wrapper::TI_M74Wrapper(SPI_HandleTypeDef hspi)
+TI_M74Wrapper::TI_M74Wrapper(SPI_HandleTypeDef* hspi)
 {
 	this->hspi = hspi;
 }
@@ -31,7 +31,7 @@ float TI_M74Wrapper::readTemp()
     int16_t temp;
     
     HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);  // pull the pin low
-	HAL_SPI_Receive (&hspi, data, 2, 100);  // receive 2 bytes data
+	HAL_SPI_Receive (hspi, data, 2, 100);  // receive 2 bytes data
 	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_SET);  // pull the pin high
 
     temp = ((int16_t)data[0] << 8) | data[1];
@@ -39,7 +39,7 @@ float TI_M74Wrapper::readTemp()
     if(temp > 0x7000){
         temp = temp & 0x7FFF;
     }
-    
+
     return (temp>>3)*0.0625;
 }
 
@@ -49,7 +49,7 @@ void TI_M74Wrapper::writeData(uint8_t address, uint8_t value)
 	data[0] = address|0x40;  // multibyte write
 	data[1] = value;
 	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);  // pull the cs pin low
-	HAL_SPI_Transmit (&hspi, data, 2, 100);  // write data to register
+	HAL_SPI_Transmit (hspi, data, 2, 100);  // write data to register
 	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_SET);  // pull the cs pin high
 }
 
