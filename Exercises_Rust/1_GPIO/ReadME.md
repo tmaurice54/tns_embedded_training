@@ -146,3 +146,14 @@ Don't forget that the led is linked to the `TIM2`, and you can use the channel 1
 
 Now that you have understood what a PWM is and how to use it, try to change continually the brightness of the led.  
 You can create a loop which will slowly turn off the led and after slowly turn on the led.
+
+## Question 7: servo motor [Real board]
+
+PWM is also used to control motor.
+In this question you have to use what you learn to control a servo motor.
+
+The servo motor used in this training has 3 wire.
+One brown for GND, one orange for PWM Input and one red for VCC.
+
+Create a code that will change the position of the servo motor.
+The servo motor begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.

@@ -75,3 +75,14 @@ The idea is to create a task that reads the temp value every 200ms and puts the 
 And the `getFilteredTemp()` eliminates the smallest and greatest values and return the average of the 8 temperature values left.  
 
 When working with sensors, we usually filter the values to work with less noisy data.
+
+## Question 5: Filter value of a temperature sensor [Real board]
+
+Prerequisite: Exercises on I2C
+
+For this exercise you will reuse the interface you have coded for the I2C sensor.
+In this interface you will add a new function `getFilteredTemp()`.
+The idea is to create a task that reads the temp value every 200ms and puts the value in a array of 10 temperature type FIFO.
+And the `getFilteredTemp()` eliminates the smallest and greatest values and return the average of the 8 temperature values left.  
+
+When working with sensors, we usually filter the values to work with less noisy data.

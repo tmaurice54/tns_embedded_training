@@ -212,7 +212,7 @@ static void MX_GPIO_Init(void) {
 /* USER CODE BEGIN 4 */
 void question1(void) {
   char test_value = (char)rand() % 255;
-  char *value = (char *)0x0801E900;
+  char *value = (char *)0x08000000;
   assert(!test_value == value[0]);
 }
 

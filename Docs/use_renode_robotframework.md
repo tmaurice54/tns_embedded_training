@@ -7,9 +7,67 @@ This document is about the Robot Framework and Renode, their purpose and how the
 Renode is an open-source software development framework with commercial support from Antmicro that lets you develop, debug and test multi-node device systems reliably, scalably and effectively.
 In this training we will use Renode to simulate the STM32 board.
 
-To install renode (for Windows):
+### Install renode for Windows
 
 - go to [https://github.com/renode/renode/releases](https://github.com/renode/renode/releases) and download the latest version of the .msi installer.
+
+### Install renode for Linux
+
+First of all go to [https://github.com/renode/renode/releases/tag/v1.13.3](https://github.com/renode/renode/releases) and download the latest version of the Linux portable file .tar.gz !
+
+As of the time of writing this tutorial, the current version of renode is Renode 1.13.3.
+
+#### Using the Linux portable release
+
+After you download the file, unpack it using :
+
+``` bash
+mkdir renode_portable
+tar xf  renode-*.linux-portable.tar.gz -C renode_portable --strip-components=1
+```
+
+#### Installing dependencies
+
+##### Add the Mono repository to your system
+
+Go to [https://www.mono-project.com/download/stable/#download-lin](https://www.mono-project.com/download/stable/#download-lin) and download it using the commands based on the linux distribution that you have (Ubuntu, Debian, Raspbian...)
+
+##### Other dependencies (Ubuntu 20.04)
+
+On Ubuntu 20.04, you can install the remaining dependencies with the following command:
+
+``` bash
+sudo apt-get install policykit-1 libgtk2.0-0 screen uml-utilities gtk-sharp2 libc6-dev gcc python3 python3-pip
+```
+
+If you are running a different distribution than Ubuntu, you will need to install an analogous list of packages using your package manager; note that the package names may differ slightly.
+
+##### Additional prerequisites (for Robot framework testing)
+
+To write and run test cases, Renode integrates with the Robot testing framework. This requires you to install Python 3 with pip (note that the relevant package may be called python-pip or python3-pip on Linux).
+
+Once you have Python 3 and pip, install some additional modules :
+
+``` bash
+python3 -m pip install -r tests/requirements.txt
+```
+
+#### Running Renode
+
+If you followed the instructions on installing from a package above, and if you built it from source, navigate to the relevant directory and use :
+
+``` bash
+./renode 
+```
+
+To use it from any location, enter the created directory and add it to the system path:
+
+```bash
+cd renode_portable
+export PATH="`pwd`:$PATH"
+```
+
+### How to use Renode
 
 Renode has a graphic interface with a Log window and a window for the Renode terminal.
 Once Renode is open, you must create a machine with the command:

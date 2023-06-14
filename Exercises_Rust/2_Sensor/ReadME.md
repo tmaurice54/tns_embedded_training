@@ -1,10 +1,11 @@
 # Exercise on sensor
 
-In this exercise you will discover how to use a SPI sensor with STM32 board using the Rust language.
-For this exercise you will need renode because we don't have access to a SPI sensor.  
-But the board we can simulate on renode has the temperature sensor TI LM74 connected on the SPI2.
+In this exercise you will discover how to use a SPI ans I2C sensor with STM32 board.
+The SPI part will be on Renode and the I2C part will be done with the real board and a sensor.
 
-This temperature sensor communicates with the SPI (Serial Peripheral Interface) protocol.  
+## SPI information
+
+The sensor LM74 that can be simulate on renode communicates with the SPI (Serial Peripheral Interface) protocol.  
 With SPI communication, the circuits communicate in a master-slave scheme, where the master controls the communication.  
 The master is connected to his slaves with 4 ports:
 
@@ -18,23 +19,47 @@ That's why there is the SS port which is different for each slave.
 The value of SS is 1 by default, and when we want to start a communication with a specific slave, we change the value to 0 and then start the communication.  
 More information about the SPI Protocol [here](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/).
 
-Useful information:  
+Information:  
 
 In this exercise we will use the HAL library and the SPI2 of the STM32 board.
-Pin configuration on the STM32F401RE board for the SPI2
+Pin configuration on the STM32F401RE board for the SPI2:
 
 - SS: PB9 or PB12  
 - MISO: PC2  
 - MOSI: PC3  
 - Clock: PB10  
 
-The main.cpp file already has a handler for the SPI2 and the initilisation is already done.
-
 Useful links:  
 [Crate stm32f4xx_hal](https://docs.rs/stm32f4xx-hal/latest/stm32f4xx_hal/)  
 [Information about pin](https://os.mbed.com/platforms/ST-Nucleo-F401RE/)  
 [Rust embedded doc](https://docs.rust-embedded.org/book/intro/index.html/)  
 [TI LM74 Datasheet](https://pdf1.alldatasheet.net/datasheet-pdf/view/9026/NSC/LM74.html)  
+
+## I2C information
+
+The sensor TC74 communicates with I2C communication.
+This protocol is a master/slave communication using 2 ports:
+
+- SCLK to share the clock to the slaves
+- SDA to share the data
+
+These pins on the master can be used for several slaves.
+To differentiate the slaves, each slaves has an address.
+This address is used when data are send to commuincate with a specific slave.
+
+Informations :
+
+In this exercise we will use the HAL library and the I2C3 of the STM32 board.
+Pin configuration on the STM32F401RE board for the I2C3:
+
+- SCLK: PA8
+- SDA: PC9
+
+Useful links:  
+[Crate stm32f4xx_hal](https://docs.rs/stm32f4xx-hal/latest/stm32f4xx_hal/)  
+[Information about pin](https://os.mbed.com/platforms/ST-Nucleo-F401RE/)  
+[Rust embedded doc](https://docs.rust-embedded.org/book/intro/index.html/)
+[TC74 Datasheet](https://www.alldatasheet.com/datasheet-pdf/pdf/75085/MICROCHIP/TC74.html)  
 
 ## Question 1: Get data from SPI [Renode]
 
@@ -47,6 +72,21 @@ The LM74 sensor sends data that you have to process to get the temperature value
 ## Question 2: Interface for the sensor [Renode]
 
 Now you have understood how to read values from a SPI Sensor.
+But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.  
+Create an interface for this sensor which will contain a function get_temp() to read the temperature and use it in your main function.
+
+A possibility is to create a `struct` and then use `impl` to implement function for this struct.
+
+## Question 3: Get data from I2C [Real board]
+
+Our objective is to read the temperature of a sensor connected via I2C.  
+After looking at the documentation about the TC74 sensor and on how to use I2C with STM32 board,
+create a function that will read the temperature and put the value in a buffer.  
+Don't forget to change the value of SS to 0 send/receive data, and after the communication is done to change again the value to 1.  
+
+## Question 2: Interface for the I2C sensor [Real board]
+
+Now you have understood how to read values from a I2C Sensor.
 But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.  
 Create an interface for this sensor which will contain a function get_temp() to read the temperature and use it in your main function.
 

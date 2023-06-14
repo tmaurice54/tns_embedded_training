@@ -4,7 +4,6 @@
 
 // Panic handler
 use panic_halt as _;
-
 use cortex_m_rt::entry;
 
 // HAL library for stm32f4xx board
@@ -15,7 +14,6 @@ use stm32f4xx_hal::{
 
 #[entry]
 fn main() -> ! {
-    
     // Get access to device and core peripherals
     let device = pac::Peripherals::take().unwrap();
     let core = cortex_m::Peripherals::take().unwrap();

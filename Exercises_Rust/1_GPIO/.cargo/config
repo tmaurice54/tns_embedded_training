@@ -1,6 +1,11 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = "probe-run --chip STM32F401re --backtrace=auto"
+
 [build]
 # Always compile for the instruction set of the STM32F401
 target = "thumbv7em-none-eabihf"
 
 # use the Tlink.x scrip from the cortex-m-rt crate
-rustflags = [ "-C", "link-arg=-Tlink.x"]
+[target.thumbv7em-none-eabihf]
+rustflags = [ "-C", "link-arg=-Tlink.x",
+              "-C", "link-arg=-Tdefmt.x",]
