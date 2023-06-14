@@ -40,9 +40,16 @@ And for the other settings select `Do not set`
 ![Ozone4](ressources/Ozone4.PNG)
 
 Now your project is ready.  
-You can press the button `Download and reset program` on the top-left: 
+You can press the button `Download and reset program` on the top-left:
 
 ![Ozone5](ressources/Ozone5.PNG)
 
 The program is now flashed on the board.  
 You have access to all the tools of Ozone to debug such as the memory or the console.
+
+If Ozone cannot find/open the file because the .elf has been created on WSL, this is because of a mismatch between Windows and Linux path.
+You can resolve this issue using the following command :
+
+```bash
+Project.AddPathSubstitute("/mnt/c/","C:/")
+```
