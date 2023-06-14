@@ -82,7 +82,8 @@ A possibility is to create a `struct` and then use `impl` to implement function 
 Our objective is to read the temperature of a sensor connected via I2C.  
 After looking at the documentation about the TC74 sensor and on how to use I2C with STM32 board,
 create a function that will read the temperature and put the value in a buffer.  
-Don't forget to change the value of SS to 0 send/receive data, and after the communication is done to change again the value to 1.  
+
+While connecting the sensor to the board, don't forget to also connected the pin SDA and SCL of the sensor to GND or VCC with a resistor.
 
 ## Question 2: Interface for the I2C sensor [Real board]
 

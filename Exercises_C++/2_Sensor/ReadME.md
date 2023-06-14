@@ -86,6 +86,8 @@ Our objective is to read the temperature of a sensor connected via I2C.
 After looking at the documentation about the TC74 sensor and on how to use I2C with STM32 board,
 create a function that will read the temperature and put the value in a buffer.  
 
+While connecting the sensor to the board, don't forget to also connected the pin SDA and SCL of the sensor to GND or VCC with a resistor.
+
 ## Question 4: Interface the sensor [Real board]
 
 Now you have understood how to read values from I2C Sensor.
@@ -102,5 +104,11 @@ For that you will use what you learned before on the I2C protocol.
 To read and write data you may want to use the function `HAL_I2C_Mem_Write` and `HAL_I2C_Mem_Read` of the STM32 HAL library.
 With these functions you can choose the address of the data inside the EEPROM you want to work with.
 
+How to connect:
+
+![EEPROM connection](../../Docs/ressources/EEPROM_connection.png)
+
+Some help:
+[Wiki EEPROM](https://en.wikipedia.org/wiki/EEPROM)
 [Example of project with EEPROM](https://controllerstech.com/eeprom-and-stm32/)
 [EERPOM Datasheet](https://docs.rs-online.com/7608/0900766b813214df.pdf)
