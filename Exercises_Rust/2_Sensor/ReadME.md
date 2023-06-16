@@ -85,10 +85,14 @@ create a function that will read the temperature and put the value in a buffer.
 
 While connecting the sensor to the board, don't forget to also connected the pin SDA and SCL of the sensor to GND or VCC with a resistor.
 
-## Question 2: Interface for the I2C sensor [Real board]
+## Question 4: Interface for the I2C sensor [Real board]
 
 Now you have understood how to read values from a I2C Sensor.
 But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.  
 Create an interface for this sensor which will contain a function get_temp() to read the temperature and use it in your main function.
 
 A possibility is to create a `struct` and then use `impl` to implement function for this struct.
+
+## Question 5: Display the temperature on 7 Segment display [Real board]
+
+TODO

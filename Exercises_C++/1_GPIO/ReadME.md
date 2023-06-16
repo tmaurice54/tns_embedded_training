@@ -94,3 +94,20 @@ One brown for GND, one orange for PWM Input and one red for VCC.
 
 Create a code that will change the position of the servo motor.
 The servo motor begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.
+
+## Question 8: 7 Segment display [Real Board]
+
+In this training you have normaly access to 7 segment display.
+They are used to diplay one digit 0-9.
+There is two type of those, cathode or anode, and in this training we will focus on the second one.
+But the differenc is not big, just the intern circuit and so the connection with the board are different.
+
+![7 segment](../../Docs/ressources/7Segment.jpg)
+
+To connect this 7 segment display to the board, you can connect one of the Vcc to the 5V output of the board with a 1kOhm resistor.
+Then connect the a,b,c,d,e,f,g,dp to the pin of the board.
+You can chose any GPIO pins, but some pins are not avalable because of other periphral or something else.
+For example you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9.  
+Don't forget to initiate these pins, you can look at how this is done in the `MX_GPIO_Init` function and add code in this function or in the `main` funtion.
+
+Try to connect the 7 segment display and display a counter from 0-9 that loop.

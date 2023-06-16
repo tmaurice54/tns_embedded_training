@@ -65,7 +65,7 @@ The user button will create an interrupt and release a semaphore to unblock the 
 
 Note that to realease a semaphore in an interruption callback you need the function : `xSemaphoreGiveFromISR(myBinaryHandle, pdFALSE)`
 
-## Question 4: Filter value of a temperature sensor [Renode]
+## Question 4: Filter value of a SPI temperature sensor [Renode]
 
 Prerequisite: Exercises on SPI
 
@@ -76,7 +76,7 @@ And the `getFilteredTemp()` eliminates the smallest and greatest values and retu
 
 When working with sensors, we usually filter the values to work with less noisy data.
 
-## Question 5: Filter value of a temperature sensor [Real board]
+## Question 5: Filter value of a I2C temperature sensor [Real board]
 
 Prerequisite: Exercises on I2C
 

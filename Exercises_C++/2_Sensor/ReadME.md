@@ -73,7 +73,7 @@ The LM74 sensor sends data that you have to process to get the temperature value
 
 To test your code with the Robot Framework test, turn on the user LED if the value of the Temperature is 50, and turn the LED off otherwise.
 
-## Question 2: Interface for the sensor [Renode]
+## Question 2: Interface for the SPI sensor [Renode]
 
 Now you have understood how to read values from SPI Sensor.
 But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.
@@ -88,18 +88,23 @@ create a function that will read the temperature and put the value in a buffer.
 
 While connecting the sensor to the board, don't forget to also connected the pin SDA and SCL of the sensor to GND or VCC with a resistor.
 
-## Question 4: Interface the sensor [Real board]
+## Question 4: Interface the I2C sensor [Real board]
 
 Now you have understood how to read values from I2C Sensor.
 But this kind of code isn't practical, and developers usually create an interface to simplify their code and the future utilisation of the sensor.
 In a new file, create an interface for this sensor which will contain a function readTemp() to read the temperature.
 After that you will create an instance in your main file and try to read the temperature value.  
 
-## Question 5: Display a digit with 7 segment [Real board] TODO
+## Question 5: Display the temperature with 7 segment display [Real board]
 
-## Question 6: Display the temperature with 7 segment display [Real board] TODO
+You know how to read the temperature from a temperature sensor and you know how to display digits from the exercise on GPIO.
+Let's create a thermometer.
+You can use 2 7 segment display and you can also display negativ temperature if you use the `dp` of the display.
 
-## Question 5: Read/Write value to an EEPROM [Real board]
+For the pins you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9 for one digit and PB0,PB1,PB4,PB5,PB6 and PB7.
+Don't forget to initate these pins.
+
+## Question 6: Read/Write value to an EEPROM [Real board]
 
 The EEPROM (Electrically Erasable Programmable Read-Only Memory) may also used I2C protocol.
 In This exercise you will have to write and read data from/to an EEPROM.
