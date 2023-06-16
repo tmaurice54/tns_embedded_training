@@ -95,6 +95,10 @@ But this kind of code isn't practical, and developers usually create an interfac
 In a new file, create an interface for this sensor which will contain a function readTemp() to read the temperature.
 After that you will create an instance in your main file and try to read the temperature value.  
 
+## Question 5: Display a digit with 7 segment [Real board] TODO
+
+## Question 6: Display the temperature with 7 segment display [Real board] TODO
+
 ## Question 5: Read/Write value to an EEPROM [Real board]
 
 The EEPROM (Electrically Erasable Programmable Read-Only Memory) may also used I2C protocol.
