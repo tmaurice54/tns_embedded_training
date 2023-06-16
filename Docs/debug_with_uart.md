@@ -34,6 +34,8 @@ This code will rewrite the `fputc()` function wich is used by the `printf()` fun
 Now your prints are redirect to the UART2.
 You can then use a serial terminal such as putty and read the data printed.
 
+You can also directly use the function `HAL_UART_Transmit` to print the text you want.
+
 ## Print on serial terminal with UART (Rust version)
 
 To print data using UART in rust you just have to add the UART set up and then you can write data using the macro `writeln!`.

@@ -73,7 +73,8 @@ Frequency describes how fast the PWM completes a cycle and therefore how fast it
 You can find in the main file, in the `MX_TIM2_Init` function, that the Timer2 is already initiated with the appropriate values (You will have to call `MX_TIM2_Init` from the main function).
 The prescaler of 72 will set the time clock of the timer to 1MHz as the original clock is 72MHz.  
 And the period of 100 will set the timer's frequency to 10kHz.  
-Now you can change the value of the TIM2->CRR1 register which will change the duty cycle.  
+Now you can change the value of the `TIM2->CRR1` register which will change the duty cycle.  
+`CRR1` stands for the channel 1, if you use another channel don't forget to change this register name (for example `TIM3->CRR2` if for channel 2 of timer 3).
 The value of this register must be between 0 and the period (100 here).  
 For example, a value of 30 will make the duty cycle 30%.  
 
@@ -84,7 +85,7 @@ Now create a function that will change the Brightness of the user LED.
 Now that you have understood what a PWM is and how to use it, try to change continually the brightness of the LED.  
 You can create a loop which will slowly turn off the LED and after slowly turn on the LED.
 
-## Question 7: servo motor [Real board]
+## Question 7: servo motor [Real board] TODO (Don't do this exercise for now)
 
 PWM is also used to control motor.
 In this question you have to use what you learn to control a servo motor.
