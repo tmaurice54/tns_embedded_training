@@ -95,11 +95,11 @@ But this kind of code isn't practical, and developers usually create an interfac
 In a new file, create an interface for this sensor which will contain a function readTemp() to read the temperature.
 After that you will create an instance in your main file and try to read the temperature value.  
 
-## Question 5: Display the temperature with 7 segment display [Real board]
+## Question 5: Display the temperature with 7-segment display [Real board]
 
 You know how to read the temperature from a temperature sensor and you know how to display digits from the exercise on GPIO.
 Let's create a thermometer.
-You can use 2 7 segment display and you can also display negativ temperature if you use the `dp` of the display.
+You can use 2 7-segment display and you can also display negativ temperature if you use the `dp` of the display.
 
 For the pins you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9 for one digit and PB0,PB1,PB4,PB5,PB6 and PB7.
 Don't forget to initate these pins.

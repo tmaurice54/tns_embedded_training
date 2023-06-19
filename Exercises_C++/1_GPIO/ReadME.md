@@ -85,7 +85,7 @@ Now create a function that will change the Brightness of the user LED.
 Now that you have understood what a PWM is and how to use it, try to change continually the brightness of the LED.  
 You can create a loop which will slowly turn off the LED and after slowly turn on the LED.
 
-## Question 7: servo motor [Real board] TODO (Don't do this exercise for now)
+## Question 7: servo motor [Real board]
 
 PWM is also used to control motor.
 In this question you have to use what you learn to control a servo motor.
@@ -94,7 +94,18 @@ The servo motor used in this training has 3 wire.
 One brown for GND, one orange for PWM Input and one red for VCC.
 
 Create a code that will change the position of the servo motor.
-The servo motor begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.
+The servo motor has to begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.
+
+For this question you will have to decomment and comment some lines in the `MX_TIM2_Init` function.
+This is because the led and the servomotor don't use the same parameter for the `PWM input`.
+
+Information:
+
+A servo motor is a specific motor with precision and a defined ranged of motion.
+We can control them with `PWM`, usually they work with 50Hz input and a value of 1 for 1ms means one extreme (0 degree) and 2ms means the other extreme (180 degree).
+But there is a lot of different servomotor and you have to look at the datasheet to have the full configuration.
+
+[Video about servomotor](https://www.youtube.com/watch?v=g68khnZnJKM&ab_channel=Thescienceworks)
 
 ## Question 8: 7 Segment display [Real Board]
 
@@ -111,4 +122,4 @@ You can chose any GPIO pins, but some pins are not avalable because of other per
 For example you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9.  
 Don't forget to initiate these pins, you can look at how this is done in the `MX_GPIO_Init` function and add code in this function or in the `main` funtion.
 
-Try to connect the 7 segment display and display a counter from 0-9 that loop.
+Try to connect the 7 segment display and display a counter from 0-9 that loops.
