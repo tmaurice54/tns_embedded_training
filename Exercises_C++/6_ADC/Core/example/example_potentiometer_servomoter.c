@@ -13,7 +13,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -23,29 +23,17 @@
 #include <stdio.h>
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c3;
-
+ADC_HandleTypeDef hadc1;
+TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart2;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-void displayDigit(int value);
+static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
 
-/* Private user code ---------------------------------------------------------*/
-uint8_t segmentNumber[10] = {
-        0x3f,  // 0
-        0x06,  // 1
-        0x5b,  // 2
-        0x4f,  // 3
-        0x66,  // 4
-        0x6d,  // 5
-        0x7d,  // 6
-        0x07,  // 7
-        0x7f,  // 8
-        0x67   // 9
-};
 
 /**
   * @brief  The application entry point.
@@ -64,15 +52,26 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_ADC1_Init();
+  MX_TIM2_Init();
 
-  uint8_t value = 0;
+  /* Start PWM on TIM2 Channel 2*/
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+
+	uint16_t raw;
+	char msg[10];
 
   /* Infinite loop */
   while (1)
   {
-      displayDigit(segmentNumber[value]);
-      value = (value+1)%10;
-      HAL_Delay(1000);
+	HAL_ADC_Start(&hadc1); // Start ADC1
+	HAL_ADC_PollForConversion(&hadc1,HAL_MAX_DELAY); // Wait for conversion
+	raw = HAL_ADC_GetValue(&hadc1); // Get the value
+	
+	raw = (uint16_t)(50+((float)raw/4096)*(125-50)); // Transform the value to correspond to servomotor interval
+	TIM2->CCR2 = raw; // Change Tim2 Channel2 duty cycle
+
+	HAL_Delay(1);
   }
 }
 
@@ -123,6 +122,84 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 840-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 1000-1;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -159,9 +236,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5
-                          |GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_9, GPIO_PIN_RESET);
-
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -169,29 +244,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA0 PA1 PA4 PA5
-                           PA6 PA7 PA9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5
-                          |GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_9;
+  /*Configure GPIO pin : PA10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
-
-/* USER CODE BEGIN 4 */
-void displayDigit(int number)
-{
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 1 - ((number>>0)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1 - ((number>>1)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1 - ((number>>2)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - ((number>>3)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, 1 - ((number>>4)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1 - ((number>>5)&0x01));
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1 - ((number>>6)&0x01));
-}
-
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -43,11 +43,13 @@ You should see the value change between 0 and 4096.
 Create a code that will change the brightness of the user led (or another one) depends on the position of the potentiometer.
 You will have to decomment some code in the `main` and in the `MX_TIM2_Init` functions. (Leave commented if not used)  
 And the period is already set to 4096, so you can directly use the value from `ADC1` to the `TIM2->CRR1` register.
-You don't need to modify the value from the `ADC1`.
+You don't need to modify the value from the `ADC1`.  
+Don't forget to start the `PWM Timer2` on the channel 1 for the User Led.
 
 ## Question 3: Control the servomotor
 
 Create a code that will control the position of the servo motor with the potentiometer.
 You will have to decomment some code in the `main` and in the `MX_TIM2_Init` functions. (Leave commented if not used)  
 You can then use the `Timer 2` for PWM generation.
-Don't forget that the value from `ADC1` is in the interval `0..4096` and that the value for the servomotor needs to be inside the interval `0..150`.
+Don't forget that the value from `ADC1` is in the interval `0..4096` and that the value for the servomotor needs to be inside the interval `0..150`.  
+When you start your `PWM Timer2` don't forget to use the channel on which the servomotor is connected.
