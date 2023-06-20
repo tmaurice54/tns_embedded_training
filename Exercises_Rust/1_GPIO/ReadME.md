@@ -9,7 +9,7 @@ Useful information:
 The board STM32F401RE come with a User Led (named led 2) connected to the STM32 I/O PA5, which means Port A Pin 5.
 It also come with a user button connected to the STM32 I/O PC13, which means Port B pin 13.
 
-The user led is linked to the Timer2 Channel1
+The user led is linked to the Timer 2 Channel 1
 
 Useful links:  
 [Crate stm32f4xx_hal](https://docs.rs/stm32f4xx-hal/latest/stm32f4xx_hal/)  
@@ -133,7 +133,7 @@ To achieve that you will need the following code:
     // Get max duty
     let mut max_duty = led_pwm.get_max_duty();
 
-    // Enable the pwm on channel C1
+    // Enable the pwm on channel CX
     pin_pwm.enable(Channel::CX);
 
     // Set the duty of the pin
@@ -156,4 +156,31 @@ The servo motor used in this training has 3 wire.
 One brown for GND, one orange for PWM Input and one red for VCC.
 
 Create a code that will change the position of the servo motor.
-The servo motor begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.
+The servo motor has to begin at one of his extrem position, go to the over position in several seconds and comme back to the origin, and loop this execution.
+
+For this question you will have to change the frequency used to 50hz.
+
+Information:
+
+A servo motor is a specific motor with precision and a defined ranged of motion.
+We can control them with `PWM`, usually they work with 50Hz input and a value of 1 for 1ms means one extreme (0 degree) and 2ms means the other extreme (180 degree).
+But there is a lot of different servomotor and you have to look at the datasheet to have the full configuration.
+
+[Video about servomotor](https://www.youtube.com/watch?v=g68khnZnJKM&ab_channel=Thescienceworks)
+
+## Question 8: 7 Segment display [Real Board]
+
+In this training you have normaly access to 7 segment display.
+They are used to diplay one digit 0-9.
+There is two type of those, cathode or anode, and in this training we will focus on the second one.
+But the differenc is not big, just the intern circuit and so the connection with the board are different.
+
+![7 segment](../../Docs/ressources/7Segment.jpg)
+
+To connect this 7 segment display to the board, you can connect one of the Vcc to the 5V output of the board with a 1kOhm resistor.
+Then connect the a,b,c,d,e,f,g,dp to the pin of the board.
+You can chose any GPIO pins, but some pins are not avalable because of other periphral or something else.
+For example you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9.  
+Don't forget to initiate these pins in output mode.
+
+Try to connect the 7 segment display and display a counter from 0-9 that loops.

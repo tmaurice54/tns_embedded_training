@@ -1,0 +1,24 @@
+[package]
+name = "adc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cortex-m = "^0.7"        # Access to generic ARM peripherals
+cortex-m-rt = "^0.7"     # Startup code for the ARM Core
+panic-probe = { version = "0.3", features = ["print-defmt"] }
+embedded-hal = "^0.2"    # Access to generic embedded functions
+panic-halt = "^0.2.0"    # Panic handler
+
+
+# Access to the STM32F401 HAL.
+[dependencies.stm32f4xx-hal]
+features = ["rt", "stm32f401", "usb_fs", "defmt"]
+version = "^0.15"
+
+# Cargo.toml
+[profile.dev]
+debug = 1 # default is `true`; not needed if not already overridden
+
+[profile.release]
+debug = 0 # default is `false`; using `true` is also OK as symbols reside on the host, not the target

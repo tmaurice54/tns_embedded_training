@@ -95,4 +95,9 @@ A possibility is to create a `struct` and then use `impl` to implement function 
 
 ## Question 5: Display the temperature on 7 Segment display [Real board]
 
-TODO
+You know how to read the temperature from a temperature sensor and you know how to display digits from the exercise on GPIO.
+Let's create a thermometer.
+You can use 2 7-segment display and you can also display negativ temperature if you use the `dp` of the display.
+
+For the pins you can use the pins PA0,PA1,PA4,PA5,PA6,PA7 and PA9 for one digit and PB0,PB1,PB4,PB5,PB6 and PB7.
+Don't forget to initate these pins.
