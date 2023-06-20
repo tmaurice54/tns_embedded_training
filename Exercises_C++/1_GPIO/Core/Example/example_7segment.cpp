@@ -179,7 +179,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-/* USER CODE BEGIN 4 */
 void displayDigit(int number)
 {
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 1 - ((number>>0)&0x01));
@@ -190,8 +189,6 @@ void displayDigit(int number)
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1 - ((number>>5)&0x01));
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1 - ((number>>6)&0x01));
 }
-
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
