@@ -20,7 +20,7 @@ All the files used in this C/C++ part has been generated with STM32CubeIDE, so y
 It contains a `SystemClock_Config` to init the clock, `MX_GPIO_Init` to init the pin GPIO pin of the board and `MX_USART2_UART_Init` to init the UART2 that can be used for communication with your computer.  
 It contains also a `main` function which first call these init functions and then go in a infinite loop.
 This infinite loop is used for the device to never stop and to execute an/multiple action(s) indefinitely.  
-For now the `main` function only blink the user led every second.
+For now the `main` function only blink the user led every second and send `Hello World!` in the `UART2`.
 
 ## Question 2: Compile the exercise
 
@@ -44,7 +44,15 @@ To dot it, you can follow the steps in [this file](../../Docs/use_ozone.md)
 
 You should see the user led blinking.
 
-## Question 4: Flash your code in Renode [Need Renode]
+## Question 4: Read UART2 with seral terminal [Need Real Board]
+
+You may have see that in the code, a message is transmit in `UART2`.
+This message can be read by using a serial terminal such as putty.
+You juste have to connect the board with USB (which is normally already done), open your serial terminal with the `COM` associate to the board and set the baudrate to 115200.
+
+Once the connection is done you should see the message be printed every second in the serial terminal.
+
+## Question 5: Flash your code in Renode [Need Renode]
 
 If you don't have the real board, you can simulate it in renode and test your code with it.  
 To do it, you can follow the steps for renode [here](../../Docs/use_renode_robotframework.md)  
@@ -52,7 +60,7 @@ To do it, you can follow the steps for renode [here](../../Docs/use_renode_robot
 With the command `sysbus.gpioPortA.LD2 State` you can see the state of the user led at the current time.
 If you execute this command every second, you should see the state changing, meaning that the led is blinking.
 
-## Question 5: Unit testing with Renode and RobotFramework [Need Renode]
+## Question 6: Unit testing with Renode and RobotFramework [Need Renode]
 
 You can also execute some unit test, depends on the exercise.  
 You can look at the [this](../../Docs/use_renode_robotframework.md) doc to look at how install Robotframework and execute the tests.
