@@ -38,8 +38,7 @@ static void MX_TIM2_Init(void);
  * @brief  The application entry point.
  * @retval int
  */
-int main(void) 
-{
+int main(void) {
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.
@@ -59,7 +58,6 @@ int main(void)
 
   /* Infinite loop */
   while (1) {
-
   }
 }
 

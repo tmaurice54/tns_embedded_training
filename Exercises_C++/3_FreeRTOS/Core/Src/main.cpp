@@ -61,14 +61,13 @@ int main(void) {
 
   /* Here instantiate your tasks and semaphores */
 
-
   /* Start scheduler */
   vTaskStartScheduler();
 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   while (1) {
-
+    
   }
 }
 
@@ -214,7 +213,6 @@ static void MX_GPIO_Init(void) {
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
 }
 
 /**

@@ -19,8 +19,8 @@
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
@@ -49,22 +49,21 @@ int main(void) {
   MX_GPIO_Init();
   MX_USART2_UART_Init();
 
-
   uint8_t buf[20];
 
   /* Infinite loop */
   while (1) {
     // Change the state of the User LED
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin); 
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
     // Copy "Hello World!" in the buffer
-    strcpy((char*)buf, "Hello World!\r\n");
+    strcpy((char *)buf, "Hello World!\r\n");
 
     // Send the message with UART2
-    HAL_UART_Transmit(&huart2, buf, strlen((char*)buf), HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart2, buf, strlen((char *)buf), HAL_MAX_DELAY);
 
     // Delay in millisecond
-    HAL_Delay(1000);             
+    HAL_Delay(1000);
   }
 }
 
@@ -160,7 +159,6 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 /**

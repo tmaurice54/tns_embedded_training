@@ -53,9 +53,9 @@ int main(void) {
 
   /* Infinite loop */
   while (1) {
-    HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);  // pull the pin low
+    HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);  // pull the CS pin low
 	  HAL_SPI_Receive (&hspi2, data, 2, 100);  // receive 2 bytes data
-	  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_SET);  // pull the pin high
+	  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_12, GPIO_PIN_SET);  // pull the CS pin high
   }
 }
 

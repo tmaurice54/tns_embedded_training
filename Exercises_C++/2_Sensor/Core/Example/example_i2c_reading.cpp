@@ -51,8 +51,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C3_Init();
 
-  uint8_t addr = 148;
   HAL_StatusTypeDef ret;
+  uint8_t addr = 148;
   uint8_t buf[12];
   int8_t temp;
 
@@ -71,11 +71,8 @@ int main(void)
         if ( ret != HAL_OK ) {
           strcpy((char*)buf, "Error Rx\r\n");
         } else {
-        temp = buf[0];
-
-          sprintf((char*)buf,
-                "%d°C\r\n",
-                temp);
+          temp = buf[0];
+          sprintf((char*)buf,"%d°C\r\n",temp);
         }
       }
 
@@ -128,7 +125,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -144,7 +141,7 @@ static void MX_I2C3_Init(void)
   hi2c3.Instance = I2C3;
   hi2c3.Init.ClockSpeed = 100000;
   hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c3.Init.OwnAddress1 = 148;
+  hi2c3.Init.OwnAddress1 = 0;
   hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c3.Init.OwnAddress2 = 0;

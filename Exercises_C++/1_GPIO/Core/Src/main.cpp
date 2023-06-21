@@ -53,7 +53,6 @@ int main(void) {
 
   /* Infinite loop */
   while (1) {
-
   }
 }
 
@@ -113,7 +112,7 @@ static void MX_TIM2_Init(void) {
   htim2.Instance = TIM2;
 
   // For led
-  htim2.Init.Prescaler = 72-1;
+  htim2.Init.Prescaler = 72 - 1;
 
   // For servomotor
   // htim2.Init.Prescaler = 840-1;
@@ -121,7 +120,7 @@ static void MX_TIM2_Init(void) {
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
 
   // For led
-  htim2.Init.Period = 100-1;
+  htim2.Init.Period = 100 - 1;
 
   // For servomotor
   // htim2.Init.Period = 1000-1;

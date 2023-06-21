@@ -34,8 +34,7 @@ static void MX_I2C3_Init(void);
  * @brief  The application entry point.
  * @retval int
  */
-int main(void) 
-{
+int main(void) {
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -52,11 +51,8 @@ int main(void)
   MX_SPI2_Init();
   MX_I2C3_Init();
 
-  float temp;
-
   /* Infinite loop */
   while (1) {
-
   }
 }
 
@@ -146,8 +142,7 @@ static void MX_SPI2_Init(void) {
   if (HAL_SPI_Init(&hspi2) != HAL_OK) {
     Error_Handler();
   }
-
-
+}
 /**
  * @brief USART2 Initialization Function
  * @param None
