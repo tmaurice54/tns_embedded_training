@@ -69,6 +69,20 @@ create a function that will read the temperature and put the value in a buffer.
 Don't forget to change the value of SS to 0 send/receive data, and after the communication is done to change again the value to 1.  
 The LM74 sensor sends data that you have to process to get the temperature value. (Look at the datasheet)  
 
+To configure the `SPI` peripheral channel you can use the following code:
+
+```Rust
+    let mut spi = Spi::new(
+        spi: SPI,
+        pins: (SCK, MISO, MOSI),
+        mode: impl Into<Mode>,
+        freq: Hertz,
+        clocks: &Clocks
+    );
+```
+
+You can also check [here](https://docs.rs/stm32f4xx-hal/latest/stm32f4xx_hal/spi/struct.Spi.html) for all the functions associate.
+
 ## Question 2: Interface for the sensor [Renode]
 
 Now you have understood how to read values from a SPI Sensor.
@@ -84,6 +98,19 @@ After looking at the documentation about the TC74 sensor and on how to use I2C w
 create a function that will read the temperature and put the value in a buffer.  
 
 While connecting the sensor to the board, don't forget to also connected the pin SDA and SCL of the sensor to GND or VCC with a resistor.
+
+To configure the `I2C` peripheral channel you can use the following code:
+
+```Rust
+let mut i2c = I2c::new(
+        i2c: I2C,
+        pins: (SCL, SDA),
+        mode: impl Into<Mode>,
+        clocks: &Clocks
+    );
+```
+
+You can also check [here](https://docs.rs/stm32f4xx-hal/latest/stm32f4xx_hal/i2c/struct.I2c.html) for all the functions associate.
 
 ## Question 4: Interface for the I2C sensor [Real board]
 

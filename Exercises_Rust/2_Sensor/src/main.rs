@@ -8,8 +8,8 @@ use cortex_m_rt::entry;
 
 // HAL library for stm32f4xx board
 use stm32f4xx_hal::{
-    spi::{Mode, NoMosi, Phase, Polarity, Spi},
-    i2c::{Mode,I2c},
+    // spi::{Mode, NoMosi, Phase, Polarity, Spi},
+    // i2c::{Mode,I2c},
     serial::{config::Config, Serial},
     pac,
     prelude::*
