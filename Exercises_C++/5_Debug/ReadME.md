@@ -6,3 +6,7 @@ You can already look at the main file which contains functions for each question
 Every functions crash and you have to find why.
 
 Just comment or decomment the question you want to do in the infinite loop in the main file.
+
+## Question 1
+
+Find which value crashs the programm using ozone.
